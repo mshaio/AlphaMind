@@ -1,0 +1,32 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.alphamind.MainActivity">
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:title="@string/action_settings"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/delete_all"
+        android:orderInCategory="100"
+        android:title="@string/delete_all"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/delete_one"
+        android:orderInCategory="100"
+        android:title="@string/delete_one"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/save_log"
+        android:icon="@drawable/ic_baseline_add_box_24"
+        app:showAsAction="ifRoom"
+        android:title="Compose">
+    </item>
+    <item
+        android:id="@+id/calendar_view"
+        android:icon="@drawable/ic_baseline_calendar_today_24"
+        app:showAsAction="ifRoom"
+        android:title="Compose">
+    </item>
+</menu>

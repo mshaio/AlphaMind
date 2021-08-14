@@ -10,8 +10,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Alphamind">
         <activity
+            android:name=".CalenderView"
+            android:label="@string/title_activity_calender_view"
+            android:theme="@style/Theme.Alphamind.NoActionBar"></activity>
+        <activity
             android:name=".ExerciseSettingsActivity"
-            android:label="@string/title_activity_exercise_settings"></activity>
+            android:label="@string/title_activity_exercise_settings"
+            android:theme="@style/Theme.Alphamind.NoActionBar"/>
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"

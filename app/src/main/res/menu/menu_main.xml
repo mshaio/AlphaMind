@@ -20,13 +20,19 @@
     <item
         android:id="@+id/save_log"
         android:icon="@drawable/ic_baseline_add_box_24"
-        app:showAsAction="ifRoom"
-        android:title="Compose">
+        app:showAsAction="always"
+        android:title="Save">
     </item>
     <item
         android:id="@+id/calendar_view"
         android:icon="@drawable/ic_baseline_calendar_today_24"
-        app:showAsAction="ifRoom"
-        android:title="Compose">
+        app:showAsAction="always"
+        android:title="Calendar">
+    </item>
+    <item
+        android:id="@+id/charts"
+        android:icon="@drawable/ic_baseline_bar_chart_24"
+        app:showAsAction="always"
+        android:title="Charts">
     </item>
 </menu>

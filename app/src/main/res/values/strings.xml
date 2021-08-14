@@ -23,6 +23,7 @@
     <string name="rep_number">Rep #:</string>
     <string name="notes">Notes: </string>
     <string name="logs">Logs: </string>
+    <string name="total_volume">Total Volume: </string>
 
     <string name="delete_all">Delete All</string>
     <string name="delete_one">Delete</string>
@@ -41,4 +42,5 @@
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="title_activity_calender_view">CalenderView</string>
 </resources>

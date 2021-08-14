@@ -100,6 +100,10 @@ class MainActivity : AppCompatActivity() {
                     deleteActivity(selectionList)
                     true
                 }
+                R.id.calendar_view -> {
+                    displayCalenderView()
+                    true
+                }
                 else -> false
             }
         }
@@ -107,6 +111,7 @@ class MainActivity : AppCompatActivity() {
 
         calendar.setOnClickListener { view ->
             val builder = MaterialDatePicker.Builder.datePicker()
+            builder.setTheme(R.style.ThemeOverlay_App_MaterialCalendar)
             val picker = builder.build()
             picker.show(supportFragmentManager, picker.toString())
 
@@ -217,5 +222,10 @@ class MainActivity : AppCompatActivity() {
         realm.beginTransaction()
         realm.where(ExerciseModel::class.java).equalTo("date", date).findAll().deleteAllFromRealm()
         realm.commitTransaction()
+    }
+
+    fun displayCalenderView() {
+        val intent = Intent(this, CalenderView::class.java)
+        startActivity(intent)
     }
 }

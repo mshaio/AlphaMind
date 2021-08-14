@@ -1,11 +1,14 @@
 package com.example.alphamind
 
+import android.os.Build
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.textfield.TextInputEditText
 import io.realm.Realm
@@ -29,9 +32,11 @@ class ExerciseSettingsActivity : AppCompatActivity() {
 //    lateinit var logTextView: EditText
 //    logTextView = findViewById(R.id.logs)
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.settings_activity)
+        window.statusBarColor = ContextCompat.getColor(this, R.color.autumn_dark_1)
 
         try {
             val exerciseDate = intent.getStringExtra("date")
@@ -41,22 +46,26 @@ class ExerciseSettingsActivity : AppCompatActivity() {
         }
 
         val exercises = listOf(
+            "Bicep Curls",
+            "Cables (down)",
+            "Cables (up)",
+            "Dead Lift",
+            "Decline Bench Press",
+            "Dumbbell Row",
             "Flat Bench Press",
             "Incline Bench Press",
-            "Decline Bench Press",
-            "Pec Deck",
-            "Cables (up)",
-            "Cables (down)",
-            "Bicep Curls",
-            "Tricep Extension",
-            "Tricep Pushdown",
-            "Squats",
+            "Lat Pressdown",
+            "Lat Pulldown",
             "Leg Press",
             "Leg Extension",
-            "Dead Lift",
-            "Lat Pulldown",
+            "Pec Deck",
             "Pull-up",
-            "Dumbbell Row"
+            "Tricep Extension",
+            "Tricep Pull Over",
+            "Tricep Pushdown",
+            "Seated Row",
+            "Shrugs",
+            "Squats",
         )
         val weights = listOf(5,7.5,10,12.5,15,17.5,20,22.5,25,30,35,40,45,90,180,270)
         val sets = listOf(1..5).flatten()
@@ -97,13 +106,27 @@ class ExerciseSettingsActivity : AppCompatActivity() {
         }
     }
 
+    fun getTotalVolume(date: String): String {
+        var todaysActivities = getActivitiesByDate(date)
+        var totalVolume: Int = 0
+        var volume: Int = 0
+        for (activity in todaysActivities) {
+            volume = activity.weights * activity.reps
+            totalVolume += volume
+        }
+        println("+++")
+        println(totalVolume)
+        println("---")
+        return totalVolume.toString() + " lbs"
+    }
+
     fun updateLogText(existingLog: String, newSet: String, newRep: String, newWeight: String, newActivity: String): Pair<String,Boolean> {
         val newActivityInfo = arrayListOf<String>(newSet,newRep,newWeight,newActivity)
         var newLog = ""
         var detectedUpdates = false
         for (i in existingLog.lines().dropLast(1)) {
-//          Set 1 Reps 1 Weight 180lb Squats
-            if (newSet == i.split(' ')[1] && newActivity == i.split(' ').last()) {
+//          Examplie of i: Set 1 Reps 1 Weight 180lb Squats
+            if (newSet == i.split(' ')[1] && newActivity.toRegex().containsMatchIn(i)) {
                 newLog += i.replace(i.substringAfterLast("Reps "), newRep)
                 newLog += " Weight "
                 newLog += newWeight
@@ -126,6 +149,7 @@ class ExerciseSettingsActivity : AppCompatActivity() {
         var weightTextView: AutoCompleteTextView = findViewById(R.id.weight)
         var noteInputEditText: TextInputEditText = findViewById(R.id.notes)
         var logTextView: EditText = findViewById(R.id.logs)
+        var totalVolumeTextView: EditText = findViewById((R.id.total_volume))
 
         val date = intent.getStringExtra("date")
         val todaysExercise = intent.getStringExtra("exercise")
@@ -148,7 +172,6 @@ class ExerciseSettingsActivity : AppCompatActivity() {
             } else {
                 logTextView.setText(updatedLogs.first)
             }
-
             println("$$$")
             println(queryObjectInRealm())
             println("%%%")
@@ -157,6 +180,8 @@ class ExerciseSettingsActivity : AppCompatActivity() {
                 repTextView.text.toString().toInt(),
                 weightTextView.text.toString().toInt(),
                 date,noteInputEditText.text.toString()))
+
+            totalVolumeTextView.setText(getTotalVolume(date))
 //            updateObjectInRealm(ExerciseModel(exerciseTextView.text.toString(), todaysExercise, ObjectId(), setTextView.text.toString().toInt(),
 //                repTextView.text.toString().toInt(),
 //                weightTextView.text.toString().toInt(),
@@ -275,6 +300,7 @@ class ExerciseSettingsActivity : AppCompatActivity() {
         var weightTextView: AutoCompleteTextView = findViewById(R.id.weight)
         var noteInputEditText: TextInputEditText = findViewById(R.id.notes)
         var logTextView: EditText = findViewById(R.id.logs)
+        var totalVolumeTextView: EditText = findViewById(R.id.total_volume)
 
 //        val existingActivity: RealmResults<ExerciseModel> = queryObjectInRealm()
         val existingActivity: RealmResults<ExerciseModel> = getActivitiesByDate(exerciseDate)
@@ -294,6 +320,7 @@ class ExerciseSettingsActivity : AppCompatActivity() {
                 logTextView.setText(logTextView.text.toString() + "Set " + setTextView.text + " Reps " + repTextView.text +
                         " Weight " + weightTextView.text + "lb " + exerciseTextView.text + "\n")
             }
+            totalVolumeTextView.setText(getTotalVolume(exerciseDate))
         }
     }
 }

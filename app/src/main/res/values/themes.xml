@@ -25,10 +25,11 @@
 
     <style name="ThemeOverlay.App.MaterialCalendar" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
         <!-- just override the colors used in the default style -->
-<!--        <item name="colorOnPrimary">@color/autumn_light</item>-->
-<!--        <item name="colorPrimary">@color/autumn_light</item>-->
+        <!--        <item name="colorOnPrimary">@color/autumn_light</item>-->
+        <!--        <item name="colorPrimary">@color/autumn_light</item>-->
         <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.App.SmallComponent</item>
-        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.App.MediumComponent</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.App.MediumComponent
+        </item>
     </style>
 
     <style name="ShapeAppearance.App.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">

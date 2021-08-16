@@ -14,6 +14,8 @@ import android.view.MenuItem
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.OnLifecycleEvent
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
@@ -28,6 +30,7 @@ import kotlin.collections.ArrayList
 
 import io.realm.Realm
 import io.realm.RealmResults
+import io.realm.Sort
 import org.bson.types.ObjectId
 
 class MainActivity : AppCompatActivity() {
@@ -155,7 +158,16 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+//    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    override fun onResume() {
+        super.onResume()
+        println("WWW")
+        prepareItems()
+    }
+
     private fun prepareItems() {
+        println("QQQ")
+        println(queryObjectInRealm())
         for (item in queryObjectInRealm()) {
             if (!dateList.contains(item.date)) {
                 itemsList.add(item.exerciseType)
@@ -191,23 +203,29 @@ class MainActivity : AppCompatActivity() {
     fun queryObjectInRealm(): RealmResults<ExerciseModel> {
         Realm.init(this)
         val realm = Realm.getDefaultInstance()
-        val activities = realm.where(ExerciseModel::class.java).findAll()
-//            .equalTo("_id", ObjectId.get()).findAll()
-//        getActivitiesByDate(activities)
+        val activities = realm.where(ExerciseModel::class.java).sort("date", Sort.DESCENDING).findAll()
         println(activities.javaClass.name)
         return activities
     }
 
     fun deleteActivity(selections: ArrayList<Boolean>) {
         var deletedDates: ArrayList<String> = arrayListOf()
+        var badIndex: ArrayList<Int> = arrayListOf()
 
         for (i in 0..selections.size-1) {
-            if (selections[i] == true) {
+            if (selections[i] == true && badIndex.size == 0) {
+                badIndex.add(i)
                 deletedDates.add(dateList[i])
-                itemsList.removeAt(i)
-                dateList.removeAt(i)
-                selectionList.removeAt(i)
+            } else if (selections[i] == true && badIndex.size > 0){
+                badIndex.add(i-badIndex.size)
+                deletedDates.add(dateList[i])
             }
+        }
+
+        for (i in badIndex) {
+            itemsList.removeAt(i)
+            dateList.removeAt(i)
+            selectionList.removeAt(i)
         }
         customAdapter.notifyDataSetChanged()
 

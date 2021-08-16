@@ -1,5 +1,6 @@
 package com.example.alphamind
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.widget.ArrayAdapter
@@ -99,6 +100,10 @@ class ExerciseSettingsActivity : AppCompatActivity() {
                 }
                 R.id.delete_all -> {
                     deleteAllObjectsInRealm()
+                    true
+                }
+                R.id.charts -> {
+                    gotoCharts()
                     true
                 }
                 else -> false
@@ -322,6 +327,14 @@ class ExerciseSettingsActivity : AppCompatActivity() {
             }
             totalVolumeTextView.setText(getTotalVolume(exerciseDate))
         }
+    }
+
+    fun gotoCharts() {
+//        val intent = Intent(this, ExeciseForm::class.java)
+////            intent.putExtra("key",value)
+//            startActivity(intent)
+        val intent = Intent(this, ChartsActivity::class.java)
+        startActivity(intent)
     }
 }
 

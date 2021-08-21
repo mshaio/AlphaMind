@@ -6,39 +6,280 @@
     android:layout_height="match_parent"
     tools:context=".ChartsActivity">
 
-    <com.google.android.material.appbar.AppBarLayout
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/topAppBar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/Theme.Alphamind.AppBarOverlay">
+        android:layout_height="?attr/actionBarSize"
+        app:title="@string/page_title"
+        app:menu="@menu/menu_main"
+        app:navigationIcon="@drawable/ic_menu_24"
+        android:background="@color/autumn_dark_1"
+        />
+<!--    <com.google.android.material.appbar.AppBarLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:theme="@style/Theme.Alphamind.AppBarOverlay">-->
 
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:minHeight="?actionBarSize"
-            android:padding="@dimen/appbar_padding"
-            android:text="@string/app_name"
-            android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title" />
+<!--        <androidx.appcompat.widget.Toolbar-->
+<!--            android:id="@+id/toolbar"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="?attr/actionBarSize"-->
+<!--            android:background="?attr/colorPrimary"-->
+<!--            app:popupTheme="@style/Theme.Alphamind.PopupOverlay" />-->
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabs"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?attr/colorPrimary" />
-    </com.google.android.material.appbar.AppBarLayout>
+<!--    </com.google.android.material.appbar.AppBarLayout>-->
 
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/view_pager"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/rl_charts"
+        android:layout_marginTop="55dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        android:gravity="top" >
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        <com.google.android.material.card.MaterialCardView
+            app:cardBackgroundColor="@color/cardview_dark_background"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_margin="5dp"
+            android:checkable="true">
+
+        <TextView
+            android:id="@+id/day_stats_title"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="75dp"
+            android:layout_marginTop="80dp"
+            android:textColor="@color/purple_200"
+            android:text="Total Volume" />
+
+        <TextView
+            android:id="@+id/day_stats_volume"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="62dp"
+            android:layout_marginTop="100dp"
+            android:textSize="32dp"
+            android:textColor="@color/purple_200"
+            android:text="" />
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            app:indicatorSize="200dp"
+            android:progress="100"
+            app:trackCornerRadius="10dp"
+            app:trackThickness="25dp"
+            app:indicatorColor="@color/teal_200"
+            android:id="@+id/chart_one"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            app:indicatorSize="200dp"
+            android:progress="90"
+            app:trackCornerRadius="10dp"
+            app:trackThickness="25dp"
+            app:indicatorColor="@color/autumn_light"
+            android:id="@+id/chart_two"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            app:indicatorSize="200dp"
+            android:progress="70"
+            app:trackCornerRadius="10dp"
+            app:trackThickness="25dp"
+            app:indicatorColor="@color/autumn_dark"
+            android:id="@+id/chart_three"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            app:indicatorSize="200dp"
+            android:progress="50"
+            app:trackCornerRadius="10dp"
+            app:trackThickness="25dp"
+            app:indicatorColor="@color/autumn_dark_1"
+            android:id="@+id/chart_four_"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            app:indicatorSize="200dp"
+            android:progress="40"
+            app:trackCornerRadius="10dp"
+            app:trackThickness="25dp"
+            app:indicatorColor="@color/teal_700"
+            android:id="@+id/chart_five"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipGroup"
+            android:layout_marginLeft="225dp"
+            android:layout_width="73dp"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/activity_one"
+                android:layout_width="73dp"
+                android:layout_height="wrap_content"
+                />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/activity_two"
+                android:layout_width="73dp"
+                android:layout_height="wrap_content"
+                />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/activity_three"
+                android:layout_width="73dp"
+                android:layout_height="wrap_content"
+                />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/activity_four"
+                android:layout_width="73dp"
+                android:layout_height="wrap_content"
+                />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/activity_five"
+                android:layout_width="73dp"
+                android:layout_height="wrap_content"
+                />
+
+        </com.google.android.material.chip.ChipGroup>
+
+        <TextView
+            android:id="@+id/text_view_act_one"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="305dp"
+            android:layout_marginTop="12dp"
+            android:text="" />
+
+        <TextView
+            android:id="@+id/text_view_act_two"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="305dp"
+            android:layout_marginTop="58dp"
+            android:text="" />
+
+        <TextView
+            android:id="@+id/text_view_act_three"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="305dp"
+            android:layout_marginTop="105dp"
+            android:text="" />
+
+        <TextView
+            android:id="@+id/text_view_act_four"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="305dp"
+            android:layout_marginTop="155dp"
+            android:text="" />
+
+        <TextView
+            android:id="@+id/text_view_act_five"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="305dp"
+            android:layout_marginTop="205dp"
+            android:text="" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            app:cardBackgroundColor="@color/cardview_dark_background"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="260dp"
+            android:checkable="true">
+
+            <TextView
+                android:id="@+id/text_view_personal_best_title"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="50dp"
+                android:textColor="@color/purple_200"
+                android:text="Personal Bests" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            app:cardBackgroundColor="@color/cardview_dark_background"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_marginLeft="210dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="260dp"
+            android:checkable="true">
+
+            <TextView
+                android:id="@+id/text_view_today_best_title"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="50dp"
+                android:textColor="@color/purple_200"
+                android:text="Today's Bests" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            app:cardBackgroundColor="@color/cardview_dark_background"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_width="match_parent"
+            android:layout_height="210dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="465dp"
+            android:layout_marginBottom="5dp"
+            android:checkable="true">
+
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/barChart"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="32dp"
+                />
+
+        </com.google.android.material.card.MaterialCardView>
+        <!--        <com.google.android.material.progressindicator.CircularProgressIndicator-->
+<!--            app:indicatorSize="200dp"-->
+<!--            android:progress="70"-->
+<!--            app:trackCornerRadius="10dp"-->
+<!--            app:trackThickness="25dp"-->
+<!--            app:indicatorColor="@color/autumn_light"-->
+<!--            android:id="@+id/chart_four"-->
+<!--            android:layout_marginLeft="10dp"-->
+<!--            android:layout_marginTop="300dp"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent" />-->
+<!--    <include layout="@layout/content_charts" />-->
+    </RelativeLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

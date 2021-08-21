@@ -39,8 +39,11 @@ class ExerciseSettingsActivity : AppCompatActivity() {
         setContentView(R.layout.settings_activity)
         window.statusBarColor = ContextCompat.getColor(this, R.color.autumn_dark_1)
 
+        var selectedDate: String = ""
+
         try {
             val exerciseDate = intent.getStringExtra("date")
+            selectedDate = exerciseDate
             getExistingActivityInfo(exerciseDate)
         } catch (e: Exception){
             println(e)
@@ -48,6 +51,7 @@ class ExerciseSettingsActivity : AppCompatActivity() {
 
         val exercises = listOf(
             "Bicep Curls",
+            "Cables Bicep Curls",
             "Cables (down)",
             "Cables (up)",
             "Dead Lift",
@@ -61,10 +65,10 @@ class ExerciseSettingsActivity : AppCompatActivity() {
             "Leg Extension",
             "Pec Deck",
             "Pull-up",
-            "Tricep Extension",
-            "Tricep Pull Over",
+            "Tricep Extension (Cable)",
+            "Tricep Extension (Dumbbell)",
             "Tricep Pushdown",
-            "Seated Row",
+            "Seated Cable Row",
             "Shrugs",
             "Squats",
         )
@@ -103,7 +107,7 @@ class ExerciseSettingsActivity : AppCompatActivity() {
                     true
                 }
                 R.id.charts -> {
-                    gotoCharts()
+                    gotoCharts(selectedDate)
                     true
                 }
                 else -> false
@@ -119,9 +123,6 @@ class ExerciseSettingsActivity : AppCompatActivity() {
             volume = activity.weights * activity.reps
             totalVolume += volume
         }
-        println("+++")
-        println(totalVolume)
-        println("---")
         return totalVolume.toString() + " lbs"
     }
 
@@ -177,9 +178,6 @@ class ExerciseSettingsActivity : AppCompatActivity() {
             } else {
                 logTextView.setText(updatedLogs.first)
             }
-            println("$$$")
-            println(queryObjectInRealm())
-            println("%%%")
 
             upsertObjectInRealm(ExerciseModel(exerciseTextView.text.toString(), todaysExercise, ObjectId(), setTextView.text.toString().toInt(),
                 repTextView.text.toString().toInt(),
@@ -246,22 +244,17 @@ class ExerciseSettingsActivity : AppCompatActivity() {
 
     fun getActivityToUpdate(activityToUpseart: ExerciseModel): ExerciseModel {
         val existingActivitiesByDate = getActivitiesByDate(activityToUpseart.date!!)
-        println("000")
-        println(existingActivitiesByDate)
-        println("111")
+
         for (existingActivity in existingActivitiesByDate) {
             if (existingActivity.date == activityToUpseart.date && existingActivity.sets == activityToUpseart.sets && existingActivity.activity == activityToUpseart.activity) {
 //                existingActivity.reps = activityToUpseart.reps
 //                existingActivity.weights = activityToUpseart.weights
 //                existingActivity.notes = activityToUpseart.notes
                 activityToUpseart._id = existingActivity._id
-                println("112")
-                println(activityToUpseart._id)
-//                println(existingActivity)
+
                 return activityToUpseart
             }
         }
-        println("113")
         return activityToUpseart
     }
 
@@ -312,10 +305,7 @@ class ExerciseSettingsActivity : AppCompatActivity() {
         var selectedItemPosition = intent.getIntExtra("selected",0)
 
         if (existingActivity.size > 0) {
-            println("AAA")
-            println(existingActivity.size)
-            println(existingActivity)
-            println("BBB")
+
             for (item in 0..existingActivity.size-1) {
                 exerciseTextView.setText(existingActivity[item]?.activity)
                 setTextView.setText(existingActivity[item]?.sets.toString())
@@ -329,11 +319,13 @@ class ExerciseSettingsActivity : AppCompatActivity() {
         }
     }
 
-    fun gotoCharts() {
+    fun gotoCharts(date: String) {
 //        val intent = Intent(this, ExeciseForm::class.java)
 ////            intent.putExtra("key",value)
 //            startActivity(intent)
         val intent = Intent(this, ChartsActivity::class.java)
+        intent.putExtra("date",date)
+        intent.putExtra("totalVolume", getTotalVolume(date))
         startActivity(intent)
     }
 }

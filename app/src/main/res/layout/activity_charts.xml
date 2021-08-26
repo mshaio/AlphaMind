@@ -221,9 +221,19 @@
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:layout_marginTop="10dp"
-                android:layout_marginLeft="50dp"
+                android:layout_gravity="center|top"
                 android:textColor="@color/purple_200"
                 android:text="Personal Bests" />
+
+            <TextView
+                android:id="@+id/tv_personal_best"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="40dp"
+                android:textColor="@color/autumn_light_2"
+                android:text="" />
 
         </com.google.android.material.card.MaterialCardView>
 
@@ -242,10 +252,56 @@
                 android:id="@+id/text_view_today_best_title"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
+                android:layout_gravity="center|top"
                 android:layout_marginTop="10dp"
-                android:layout_marginLeft="50dp"
                 android:textColor="@color/purple_200"
                 android:text="Today's Bests" />
+
+            <TextView
+                android:id="@+id/tv_today_best_one"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="40dp"
+                android:textColor="@color/autumn_light_1"
+                android:text="" />
+            <TextView
+                android:id="@+id/tv_today_best_two"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="65dp"
+                android:textColor="@color/autumn_light_1"
+                android:text="" />
+            <TextView
+                android:id="@+id/tv_today_best_three"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="90dp"
+                android:textColor="@color/autumn_light_1"
+                android:text="" />
+            <TextView
+                android:id="@+id/tv_today_best_four"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="115dp"
+                android:textColor="@color/autumn_light_1"
+                android:text="" />
+            <TextView
+                android:id="@+id/tv_today_best_five"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="140dp"
+                android:textColor="@color/autumn_light_1"
+                android:text="" />
 
         </com.google.android.material.card.MaterialCardView>
 
@@ -254,12 +310,21 @@
             android:clickable="true"
             android:focusable="true"
             android:layout_width="match_parent"
-            android:layout_height="210dp"
+            android:layout_height="match_parent"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:layout_marginTop="465dp"
             android:layout_marginBottom="5dp"
             android:checkable="true">
+
+            <TextView
+                android:id="@+id/text_view_frequency"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center|top"
+                android:textColor="@color/purple_200"
+                android:text="To Be Decided" />
 
             <com.github.mikephil.charting.charts.BarChart
                 android:id="@+id/barChart"

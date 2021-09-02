@@ -2,6 +2,7 @@ package com.example.alphamind
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,10 @@ import androidx.annotation.NonNull
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.switchmaterial.SwitchMaterial
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 internal class CustomAdapter(private var mContext: Context, private var itemsList: List<String>, private var dateList: List<String>, private var selectionList: MutableList<Boolean>) :
     RecyclerView.Adapter<CustomAdapter.MyViewHolder>() {
@@ -23,12 +28,15 @@ internal class CustomAdapter(private var mContext: Context, private var itemsLis
                 val position: Int = adapterPosition
                 val exerciseDate: String = dateList[position]
                 val todaysExercise: String = itemsList[position]
+                var dateDate: String = dateFormatter((exerciseDate))
                 println(position)
                 println("LKJHGFDS")
+                println(stringToDate(dateFormatter((exerciseDate))))
 //                mContext.startActivity(Intent(mContext, ExerciseSettingsActivity::class.java))
 
                 var intent = Intent(mContext, ExerciseSettingsActivity::class.java)
                 intent.putExtra("date", exerciseDate)
+                intent.putExtra("dateDate", dateDate)
                 intent.putExtra("exercise", todaysExercise)
                 intent.putExtra("selected", position)
                 mContext.startActivity(intent)
@@ -44,6 +52,20 @@ internal class CustomAdapter(private var mContext: Context, private var itemsLis
         }
     }
 
+    private fun dateFormatter(date: String): String {
+        //Converts dd-MM-yyyy to yyyy-MM-dd
+        var yearMonthDay: String = ""
+        for (d in date.split('-').reversed()) {
+            yearMonthDay += d
+            yearMonthDay += "-"
+        }
+        return yearMonthDay.dropLast(1)
+    }
+
+    private fun stringToDate(date: String): Date {
+        val formatter = SimpleDateFormat("yyyy-MM-dd")
+        return formatter.parse(date)
+    }
 //    RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
 //    internal inner class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 //        var itemTextView: TextView = view.findViewById(R.id.exercise_type)

@@ -111,6 +111,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        exerciseChoice.isEnabled = false
 
         calendar.setOnClickListener { view ->
             val builder = MaterialDatePicker.Builder.datePicker()
@@ -119,18 +120,21 @@ class MainActivity : AppCompatActivity() {
             picker.show(supportFragmentManager, picker.toString())
 
             picker.addOnPositiveButtonClickListener {
+                if (exerciseChoice.isEnabled) {
+                    dateList.removeAt(dateList.size-1)
+                }
                 val dateSelected = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
                 dateSelected.time = Date(it)
                 dateList.add(dateSelected.get(Calendar.DAY_OF_MONTH).toString() + "-" + (dateSelected.get(
                     Calendar.MONTH)+1).toString() + "-" + dateSelected.get(Calendar.YEAR).toString())
                 customAdapter.notifyDataSetChanged()
+                exerciseChoice.isEnabled = true
             }
         }
 
         exerciseChoice.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
-            println("TEST1")
             val singleItems = arrayOf("Arms","Back","Chest","Legs","Pull","Push")
             val checkedItem = 1
             var selectedExercise: String = ' '.toString()
@@ -145,6 +149,7 @@ class MainActivity : AppCompatActivity() {
                     itemsList.add(selectedExercise)
                     selectionList.add(false)
                     customAdapter.notifyDataSetChanged()
+                    exerciseChoice.isEnabled = false
                 }
                 // Single-choice items (initialized with checked item)
                 .setSingleChoiceItems(singleItems, checkedItem) { dialog, which ->

@@ -16,6 +16,7 @@ import io.realm.Realm
 import io.realm.RealmResults
 import org.bson.types.ObjectId
 import java.lang.Exception
+import java.text.SimpleDateFormat
 import java.util.*
 
 class ExerciseSettingsActivity : AppCompatActivity() {
@@ -40,6 +41,8 @@ class ExerciseSettingsActivity : AppCompatActivity() {
         window.statusBarColor = ContextCompat.getColor(this, R.color.autumn_dark_1)
 
         var selectedDate: String = ""
+        var realDate: Date = stringToDate(intent.getStringExtra("dateDate"))
+        var dateDate = intent.getStringExtra("dateDate")
 
         try {
             val exerciseDate = intent.getStringExtra("date")
@@ -72,7 +75,7 @@ class ExerciseSettingsActivity : AppCompatActivity() {
             "Shrugs",
             "Squats",
         )
-        val weights = listOf(5,7.5,10,12.5,15,17.5,20,22.5,25,30,35,40,45,90,180,270)
+        val weights = listOf(5,7.5,10,15,20,22.5,25,30,35,40,45,90,180,270)
         val sets = listOf(1..5).flatten()
         val reps = listOf(1..30).flatten()
 
@@ -107,12 +110,16 @@ class ExerciseSettingsActivity : AppCompatActivity() {
                     true
                 }
                 R.id.charts -> {
-                    gotoCharts(selectedDate)
+                    gotoCharts(selectedDate, dateDate)
                     true
                 }
                 else -> false
             }
         }
+    }
+    private fun stringToDate(date: String): Date {
+        val formatter = SimpleDateFormat("yyyy-MM-dd")
+        return formatter.parse(date)
     }
 
     fun getTotalVolume(date: String): String {
@@ -124,6 +131,18 @@ class ExerciseSettingsActivity : AppCompatActivity() {
             totalVolume += volume
         }
         return totalVolume.toString() + " lbs"
+    }
+
+    private fun validateInput(input: String, digitsOnly: Boolean): Boolean {
+//        val periodPattern = "\\.".toRegex()
+//        val nonWordPattern = "\\W".toRegex()
+        val nonAlphaPattern = "\\d".toRegex()
+        val nonDigitPattern = "\\D".toRegex()
+        return if (digitsOnly) {
+            nonDigitPattern.containsMatchIn(input)
+        } else {
+            nonAlphaPattern.containsMatchIn(input)
+        }
     }
 
     fun updateLogText(existingLog: String, newSet: String, newRep: String, newWeight: String, newActivity: String): Pair<String,Boolean> {
@@ -148,7 +167,7 @@ class ExerciseSettingsActivity : AppCompatActivity() {
         return Pair(newLog,detectedUpdates)
     }
 
-    fun saveExerciseData() {
+    private fun saveExerciseData() {
         var exerciseTextView: AutoCompleteTextView = findViewById(R.id.exercise_list)
         var setTextView: AutoCompleteTextView = findViewById(R.id.set_number)
         var repTextView: AutoCompleteTextView = findViewById(R.id.rep_number)
@@ -159,6 +178,10 @@ class ExerciseSettingsActivity : AppCompatActivity() {
 
         val date = intent.getStringExtra("date")
         val todaysExercise = intent.getStringExtra("exercise")
+        var dateDate = intent.getStringExtra("dateDate")
+        var realDate: Date = stringToDate(dateDate)
+
+
 
         if (exerciseTextView.text.length == 0) {
             Toast.makeText(applicationContext,"Exercise is missing",Toast.LENGTH_SHORT).show()
@@ -182,7 +205,7 @@ class ExerciseSettingsActivity : AppCompatActivity() {
             upsertObjectInRealm(ExerciseModel(exerciseTextView.text.toString(), todaysExercise, ObjectId(), setTextView.text.toString().toInt(),
                 repTextView.text.toString().toInt(),
                 weightTextView.text.toString().toInt(),
-                date,noteInputEditText.text.toString()))
+                date,realDate,noteInputEditText.text.toString()))
 
             totalVolumeTextView.setText(getTotalVolume(date))
 //            updateObjectInRealm(ExerciseModel(exerciseTextView.text.toString(), todaysExercise, ObjectId(), setTextView.text.toString().toInt(),
@@ -193,14 +216,14 @@ class ExerciseSettingsActivity : AppCompatActivity() {
             saveObjectInRealm(exerciseTextView.text.toString(), todaysExercise, setTextView.text.toString().toInt(),
                                 repTextView.text.toString().toInt(),
                                 weightTextView.text.toString().toInt(),
-                                date,noteInputEditText.text.toString())
+                                date,realDate,noteInputEditText.text.toString())
         }
         println(queryObjectInRealm())
     }
 
-    fun saveObjectInRealm(activityName: String, exerciseType: String, sets: Int, rep: Int, weights: Int, date: String, note: String) {
+    fun saveObjectInRealm(activityName: String, exerciseType: String, sets: Int, rep: Int, weights: Int, date: String, realDate: Date, note: String) {
         val id = UUID.randomUUID().mostSignificantBits
-        val activity = ExerciseModel(activityName, exerciseType, ObjectId(), sets, rep, weights, date, note)
+        val activity = ExerciseModel(activityName, exerciseType, ObjectId(), sets, rep, weights, date, realDate, note)
         Realm.init(this)
         val realm = Realm.getDefaultInstance()
         realm.beginTransaction()
@@ -319,12 +342,16 @@ class ExerciseSettingsActivity : AppCompatActivity() {
         }
     }
 
-    fun gotoCharts(date: String) {
+    private fun gotoCharts(date: String, dateDate: String) {
 //        val intent = Intent(this, ExeciseForm::class.java)
 ////            intent.putExtra("key",value)
 //            startActivity(intent)
         val intent = Intent(this, ChartsActivity::class.java)
+        println("%A%")
+        println(dateDate)
+        println("%B%")
         intent.putExtra("date",date)
+        intent.putExtra("dateDate", dateDate)
         intent.putExtra("totalVolume", getTotalVolume(date))
         startActivity(intent)
     }

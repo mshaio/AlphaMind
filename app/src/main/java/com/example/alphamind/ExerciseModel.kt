@@ -3,6 +3,7 @@ import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 import io.realm.annotations.Required
 import org.bson.types.ObjectId
+import java.util.*
 
 open class ExerciseModel(var activity: String = "",
                          var exerciseType: String = "",
@@ -12,6 +13,7 @@ open class ExerciseModel(var activity: String = "",
                          var reps: Int = 0,
                          var weights: Int = 0,
                          var date: String? = null,
+                         var dateDate: Date? = null,
                          var notes: String? = null): RealmObject()
 
 

@@ -1,9 +1,11 @@
 package com.example.alphamind
 
+import android.content.ContentValues.TAG
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import com.google.android.material.snackbar.Snackbar
@@ -19,14 +21,18 @@ import com.example.alphamind.databinding.ActivityChartsBinding
 
 import com.example.alphamind.ExerciseSettingsActivity
 import com.github.mikephil.charting.charts.BarChart
+import com.github.mikephil.charting.components.AxisBase
+import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.utils.ColorTemplate
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.android.material.chip.Chip
 import io.realm.Realm
 import io.realm.RealmResults
+import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -39,6 +45,9 @@ class ChartsActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityChartsBinding
+//    private lateinit var dataForBarChart: MutableMap<String, Int>
+    private var dataFromBarChart = arrayListOf<Int>()
+    private var datesFromBarChart = arrayListOf<String>()
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,6 +57,9 @@ class ChartsActivity : AppCompatActivity() {
 
         val exerciseDate = intent.getStringExtra("date")
         val totalExerciseVolume = intent.getStringExtra("totalVolume")
+        val dateDate = intent.getStringExtra("dateDate")
+
+        var realDate: Date = stringToDate(dateDate)
 
         val chart_one: CircularProgressIndicator = findViewById(R.id.chart_one)
         val chart_two: CircularProgressIndicator = findViewById(R.id.chart_two)
@@ -186,11 +198,6 @@ class ChartsActivity : AppCompatActivity() {
         println(getTodaysBests(exerciseDate))
         var todaysBests: MutableMap<String,Int> = getTodaysBests(exerciseDate)
         var personalBests: MutableMap<String,Int> = getPersonalBests(exerciseType)
-        val numberOfExercises = todaysBests.size
-
-//        for (i in 0..numberOfExercises) {
-//            tv_group_todays_best[i].text =
-//        }
 
         for ((exerciseItem, heaviestWeight) in todaysBests) {
             tv_today_best_one.text = tv_today_best_one.text.toString() + exerciseItem + ": " + heaviestWeight.toString() + " lbs" + "\n"
@@ -200,46 +207,78 @@ class ChartsActivity : AppCompatActivity() {
             tv_personal_best.text = tv_personal_best.text.toString() + exerciseItem + ": " + heaviestWeight.toString() + " lbs" + "\n"
         }
 
+        println("1&&&1")
         println(getPastDate(7))
+        println(exerciseDate)
+        println(realDate)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            println(getLastSameSevenExercises(exerciseType, realDate))
+            var dataForBarChart: MutableMap<String, Int> =
+                getLastSameSevenExercises(exerciseType, realDate)
 
-        val entries: ArrayList<BarEntry> = ArrayList()
-        entries.add(BarEntry(1f, 4f))
-        entries.add(BarEntry(2f, 10f))
-        entries.add(BarEntry(3f, 2f))
-        entries.add(BarEntry(4f, 15f))
-        entries.add(BarEntry(5f, 13f))
-        entries.add(BarEntry(6f, 2f))
+//            var dataFromBarChart = arrayListOf<Int>()
+            for ((k,v) in dataForBarChart) {
+                dataFromBarChart.add(v)
+                datesFromBarChart.add(k)
+            }
 
-        val barDataSet = BarDataSet(entries, "")
-        barDataSet.setColors(*ColorTemplate.COLORFUL_COLORS)
+            val entries: ArrayList<BarEntry> = ArrayList()
+//            entries.add(BarEntry(1f, dataForBarChart["29-8-2021"]!!.toFloat()))
+//            entries.add(BarEntry(2f, 100f))
+//            entries.add(BarEntry(3f, 200f))
+//            entries.add(BarEntry(4f, 150f))
+//            entries.add(BarEntry(5f, 130f))
+//            entries.add(BarEntry(6f, 200f))
+            println("@AA@")
+            println(dataFromBarChart)
+            println(datesFromBarChart)
+            println("@BB@")
 
-        val data = BarData(barDataSet)
-        val barChart = findViewById<BarChart>(R.id.barChart)
-        barChart.data = data
+            val dataForBarChartSize: Int = dataForBarChart.size
+            for (i in 0..dataForBarChartSize-1) {
+                println("QqQ")
+                println(i)
+                entries.add(BarEntry(i+1.toFloat(), dataFromBarChart[i].toFloat()))
+            }
+
+            val barDataSet = BarDataSet(entries, "")
+            barDataSet.setColors(*ColorTemplate.COLORFUL_COLORS)
+
+            val data = BarData(barDataSet)
+            val barChart = findViewById<BarChart>(R.id.barChart)
+            barChart.data = data
+
+            val xAxis: XAxis = barChart.xAxis
+            //hide grid lines
+            barChart.axisLeft.setDrawGridLines(false)
+            barChart.xAxis.setDrawGridLines(false)
+            barChart.xAxis.setDrawAxisLine(false)
+
+            //remove right y-axis
+            barChart.axisRight.isEnabled = false
+
+            //remove legend
+            barChart.legend.isEnabled = false
 
 
-        //hide grid lines
-        barChart.axisLeft.setDrawGridLines(false)
-        barChart.xAxis.setDrawGridLines(false)
-        barChart.xAxis.setDrawAxisLine(false)
-
-        //remove right y-axis
-        barChart.axisRight.isEnabled = false
-
-        //remove legend
-        barChart.legend.isEnabled = false
+            //remove description label
+            barChart.description.isEnabled = false
 
 
-        //remove description label
-        barChart.description.isEnabled = false
+            //add animation
+            barChart.animateY(3000)
 
+//            // to draw label on xAxis
+//            xAxis.position = XAxis.XAxisPosition.BOTTOM_INSIDE
+//            xAxis.valueFormatter = MyAxisFormatter()
+//            xAxis.setDrawLabels(true)
+//            xAxis.granularity = 1f
+//            xAxis.labelRotationAngle = +90f
 
-        //add animation
-        barChart.animateY(3000)
+            //draw chart
+            barChart.invalidate()
+        }
 
-
-        //draw chart
-        barChart.invalidate()
 
 //        binding = ActivityChartsBinding.inflate(layoutInflater)
 //        setContentView(binding.root)
@@ -254,6 +293,24 @@ class ChartsActivity : AppCompatActivity() {
 //            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                .setAction("Action", null).show()
 //        }
+    }
+
+//    inner class MyAxisFormatter : IndexAxisValueFormatter() {
+//
+//        override fun getAxisLabel(value: Float, axis: AxisBase?): String {
+//            val index = value.toInt()-1
+////            Log.d(TAG, "getAxisLabel: index $index")
+//            return if (index < dataFromBarChart.size) {
+//                datesFromBarChart[index]
+//            } else {
+//                ""
+//            }
+//        }
+//    }
+
+    private fun stringToDate(date: String): Date {
+        val formatter = SimpleDateFormat("yyyy-MM-dd")
+        return formatter.parse(date)
     }
 
     private fun computeBests(activities: RealmResults<ExerciseModel>, exerciseWeightMap: MutableMap<String,Int>): MutableMap<String,Int> {
@@ -297,12 +354,12 @@ class ChartsActivity : AppCompatActivity() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun getLastSameSevenExercises(exerciseType: String): MutableMap<String,Int> {
+    private fun getLastSameSevenExercises(exerciseType: String, exerciseDate: Date): MutableMap<String,Int> {
 //        val currentDateTime = LocalDateTime.now()
 //        val todaysDate = currentDateTime.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT))
         val realm: Realm = initialiseRealmDB()
-        val samePastSevenExercises = realm.where(ExerciseModel::class.java).equalTo("exerciseType", exerciseType).findAll()
-        lateinit var weightMapByDate: MutableMap<String,Int>
+        val samePastSevenExercises = realm.where(ExerciseModel::class.java).equalTo("exerciseType", exerciseType).lessThanOrEqualTo("dateDate",exerciseDate).findAll()
+        var weightMapByDate: MutableMap<String,Int> = mutableMapOf()
         for (pastExercise in samePastSevenExercises) {
             if (!weightMapByDate.containsKey(pastExercise.date)) {
                 weightMapByDate[pastExercise.date.toString()] = pastExercise.weights * pastExercise.reps

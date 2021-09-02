@@ -324,7 +324,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_gravity="center|top"
                 android:textColor="@color/purple_200"
-                android:text="To Be Decided" />
+                android:text="Exercise Volume for same past exercises" />
 
             <com.github.mikephil.charting.charts.BarChart
                 android:id="@+id/barChart"

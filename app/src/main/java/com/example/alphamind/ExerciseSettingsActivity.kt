@@ -11,6 +11,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import io.realm.Realm
 import io.realm.RealmResults
@@ -33,6 +34,7 @@ class ExerciseSettingsActivity : AppCompatActivity() {
 //    noteInputEditText = findViewById(R.id.notes)
 //    lateinit var logTextView: EditText
 //    logTextView = findViewById(R.id.logs)
+    var confirmedExerciseInfoUpdate: Boolean = false;
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -95,6 +97,13 @@ class ExerciseSettingsActivity : AppCompatActivity() {
         val weightAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, weights)
         weightView.setAdapter(weightAdapter)
 
+        val logView = findViewById<TextInputEditText>(R.id.logs)
+//        val logAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, weights)
+//        logView.setAdapter(logAdapter)
+        logView.setOnClickListener {
+            confirmExerciseUpdate()
+        }
+
         lateinit var topAppBar: MaterialToolbar
         topAppBar = findViewById<MaterialToolbar>(R.id.topAppBar)
         topAppBar.setOnMenuItemClickListener { menuItem ->
@@ -122,7 +131,7 @@ class ExerciseSettingsActivity : AppCompatActivity() {
         return formatter.parse(date)
     }
 
-    fun getTotalVolume(date: String): String {
+    private fun getTotalVolume(date: String): String {
         var todaysActivities = getActivitiesByDate(date)
         var totalVolume: Int = 0
         var volume: Int = 0
@@ -143,6 +152,21 @@ class ExerciseSettingsActivity : AppCompatActivity() {
         } else {
             nonAlphaPattern.containsMatchIn(input)
         }
+    }
+
+    private fun confirmExerciseUpdate() {
+        MaterialAlertDialogBuilder(this)
+            .setTitle(resources.getString(R.string.title))
+            .setMessage(resources.getString(R.string.update_confirm_text))
+            .setNeutralButton(resources.getString(R.string.cancel)) { dialog, which ->
+                // Respond to neutral button press
+                confirmedExerciseInfoUpdate = false
+            }
+            .setPositiveButton(resources.getString(R.string.accept)) { dialog, which ->
+                // Respond to positive button press
+                confirmedExerciseInfoUpdate = true
+            }
+            .show()
     }
 
     fun updateLogText(existingLog: String, newSet: String, newRep: String, newWeight: String, newActivity: String): Pair<String,Boolean> {
@@ -181,9 +205,15 @@ class ExerciseSettingsActivity : AppCompatActivity() {
         var dateDate = intent.getStringExtra("dateDate")
         var realDate: Date = stringToDate(dateDate)
 
-
-
-        if (exerciseTextView.text.length == 0) {
+        if (validateInput(exerciseTextView.text.toString(),false)) {
+            Toast.makeText(applicationContext,"Invalid exercise",Toast.LENGTH_SHORT).show()
+        } else if (validateInput(setTextView.text.toString(),true)) {
+            Toast.makeText(applicationContext,"Set must be a number",Toast.LENGTH_SHORT).show()
+        } else if (validateInput(repTextView.text.toString(), true)) {
+            Toast.makeText(applicationContext,"Rep must be a number",Toast.LENGTH_SHORT).show()
+        } else if (validateInput(weightTextView.text.toString(),true)) {
+            Toast.makeText(applicationContext,"Weight must be a number",Toast.LENGTH_SHORT).show()
+        } else if (exerciseTextView.text.length == 0) {
             Toast.makeText(applicationContext,"Exercise is missing",Toast.LENGTH_SHORT).show()
         } else if (setTextView.text.length == 0) {
             Toast.makeText(applicationContext,"Set # is missing",Toast.LENGTH_SHORT).show()
@@ -198,27 +228,33 @@ class ExerciseSettingsActivity : AppCompatActivity() {
 
             if (!updatedLogs.second) {
                 logTextView.setText(existingLogs + "Set " + setTextView.text + " Reps " + repTextView.text + " Weight " + weightTextView.text + "lb " + exerciseTextView.text + "\n")
+                upsertObjectInRealm(ExerciseModel(exerciseTextView.text.toString(), todaysExercise, ObjectId(), setTextView.text.toString().toInt(),
+                    repTextView.text.toString().toInt(),
+                    weightTextView.text.toString().toInt(),
+                    date,realDate,noteInputEditText.text.toString()))
+                totalVolumeTextView.setText(getTotalVolume(date))
+                Toast.makeText(applicationContext,"Added exercise",Toast.LENGTH_SHORT).show()
             } else {
-                logTextView.setText(updatedLogs.first)
+                MaterialAlertDialogBuilder(this)
+                    .setTitle(resources.getString(R.string.update_confirm_title))
+                    .setMessage(resources.getString(R.string.update_confirm_text))
+                    .setNeutralButton(resources.getString(R.string.cancel)) { dialog, which ->
+                        // Respond to neutral button press
+                    }
+                    .setPositiveButton(resources.getString(R.string.update)) { dialog, which ->
+                        // Respond to positive button press
+                        logTextView.setText(updatedLogs.first)
+                        upsertObjectInRealm(ExerciseModel(exerciseTextView.text.toString(), todaysExercise, ObjectId(), setTextView.text.toString().toInt(),
+                            repTextView.text.toString().toInt(),
+                            weightTextView.text.toString().toInt(),
+                            date,realDate,noteInputEditText.text.toString()))
+                        totalVolumeTextView.setText(getTotalVolume(date))
+                        Toast.makeText(applicationContext,"Updated exercise log",Toast.LENGTH_SHORT).show()
+                    }
+                    .show()
             }
-
-            upsertObjectInRealm(ExerciseModel(exerciseTextView.text.toString(), todaysExercise, ObjectId(), setTextView.text.toString().toInt(),
-                repTextView.text.toString().toInt(),
-                weightTextView.text.toString().toInt(),
-                date,realDate,noteInputEditText.text.toString()))
-
-            totalVolumeTextView.setText(getTotalVolume(date))
-//            updateObjectInRealm(ExerciseModel(exerciseTextView.text.toString(), todaysExercise, ObjectId(), setTextView.text.toString().toInt(),
-//                repTextView.text.toString().toInt(),
-//                weightTextView.text.toString().toInt(),
-//                date,noteInputEditText.text.toString()))
             return
-            saveObjectInRealm(exerciseTextView.text.toString(), todaysExercise, setTextView.text.toString().toInt(),
-                                repTextView.text.toString().toInt(),
-                                weightTextView.text.toString().toInt(),
-                                date,realDate,noteInputEditText.text.toString())
         }
-        println(queryObjectInRealm())
     }
 
     fun saveObjectInRealm(activityName: String, exerciseType: String, sets: Int, rep: Int, weights: Int, date: String, realDate: Date, note: String) {
@@ -238,7 +274,7 @@ class ExerciseSettingsActivity : AppCompatActivity() {
         real.where(ExerciseModel::class.java).equalTo("_id", ObjectId())
     }
 
-    fun deleteAllObjectsInRealm() {
+    private fun deleteAllObjectsInRealm() {
         Realm.init(this)
         val realm = Realm.getDefaultInstance()
         realm.beginTransaction()
@@ -250,7 +286,7 @@ class ExerciseSettingsActivity : AppCompatActivity() {
         realm.commitTransaction()
     }
 
-    fun queryObjectInRealm(): RealmResults<ExerciseModel> {
+    private fun queryObjectInRealm(): RealmResults<ExerciseModel> {
         Realm.init(this)
         val realm = Realm.getDefaultInstance()
         val activities = realm.where(ExerciseModel::class.java).findAll()
@@ -258,14 +294,14 @@ class ExerciseSettingsActivity : AppCompatActivity() {
         return activities
     }
 
-    fun getActivitiesByDate(date: String): RealmResults<ExerciseModel> {
+    private fun getActivitiesByDate(date: String): RealmResults<ExerciseModel> {
         Realm.init(this)
         val realm = Realm.getDefaultInstance()
         val activitiesByDate = realm.where(ExerciseModel::class.java).equalTo("date", date).findAll()
         return activitiesByDate
     }
 
-    fun getActivityToUpdate(activityToUpseart: ExerciseModel): ExerciseModel {
+    private fun getActivityToUpdate(activityToUpseart: ExerciseModel): ExerciseModel {
         val existingActivitiesByDate = getActivitiesByDate(activityToUpseart.date!!)
 
         for (existingActivity in existingActivitiesByDate) {
@@ -304,7 +340,7 @@ class ExerciseSettingsActivity : AppCompatActivity() {
 
     }
 
-    fun upsertObjectInRealm(activity: ExerciseModel) {
+    private fun upsertObjectInRealm(activity: ExerciseModel) {
         val activityToUpsert = getActivityToUpdate(activity)
         Realm.init(this)
         val realm = Realm.getDefaultInstance()

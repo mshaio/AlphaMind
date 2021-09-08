@@ -79,6 +79,10 @@ internal class CustomAdapter(private var mContext: Context, private var itemsLis
         return MyViewHolder(itemView)
     }
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+//        println("AAA")
+//        println(itemsList)
+//        println(position)
+//        println("BBB")
         val item = itemsList[position]
         holder.itemTextView.text = item
         holder.dateTextView.text =  dateList[position]

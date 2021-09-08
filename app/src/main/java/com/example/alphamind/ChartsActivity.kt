@@ -28,6 +28,7 @@ import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.utils.ColorTemplate
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.android.material.chip.Chip
 import io.realm.Realm
@@ -54,6 +55,12 @@ class ChartsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_charts)
         window.statusBarColor = ContextCompat.getColor(this, R.color.autumn_dark_1)
+
+        var topAppBar: MaterialToolbar = findViewById(R.id.topAppBar)
+        val saveLog = topAppBar.menu.findItem(R.id.save_log)
+        val toChartView = topAppBar.menu.findItem(R.id.charts)
+        saveLog.setVisible(false)
+        toChartView.setVisible(false)
 
         val exerciseDate = intent.getStringExtra("date")
         val totalExerciseVolume = intent.getStringExtra("totalVolume")
@@ -122,7 +129,6 @@ class ChartsActivity : AppCompatActivity() {
             if (!exerciseVolumeMap.containsKey(activity.activity)) {
                 exerciseVolumeMap[activity.activity] = activity.weights * activity.reps
             } else {
-                print("!@!@")
                 exerciseVolumeMap[activity.activity] = exerciseVolumeMap[activity.activity]!! + activity.weights * activity.reps
             }
         }
@@ -207,10 +213,6 @@ class ChartsActivity : AppCompatActivity() {
             tv_personal_best.text = tv_personal_best.text.toString() + exerciseItem + ": " + heaviestWeight.toString() + " lbs" + "\n"
         }
 
-        println("1&&&1")
-        println(getPastDate(7))
-        println(exerciseDate)
-        println(realDate)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             println(getLastSameSevenExercises(exerciseType, realDate))
             var dataForBarChart: MutableMap<String, Int> =
@@ -236,8 +238,6 @@ class ChartsActivity : AppCompatActivity() {
 
             val dataForBarChartSize: Int = dataForBarChart.size
             for (i in 0..dataForBarChartSize-1) {
-                println("QqQ")
-                println(i)
                 entries.add(BarEntry(i+1.toFloat(), dataFromBarChart[i].toFloat()))
             }
 
@@ -278,21 +278,6 @@ class ChartsActivity : AppCompatActivity() {
             //draw chart
             barChart.invalidate()
         }
-
-
-//        binding = ActivityChartsBinding.inflate(layoutInflater)
-//        setContentView(binding.root)
-//
-//        setSupportActionBar(binding.toolbar)
-//
-//        val navController = findNavController(R.id.nav_host_fragment_content_charts)
-//        appBarConfiguration = AppBarConfiguration(navController.graph)
-//        setupActionBarWithNavController(navController, appBarConfiguration)
-
-//        binding.fab.setOnClickListener { view ->
-//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                .setAction("Action", null).show()
-//        }
     }
 
 //    inner class MyAxisFormatter : IndexAxisValueFormatter() {

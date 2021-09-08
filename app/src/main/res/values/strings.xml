@@ -24,6 +24,9 @@
     <string name="notes">Notes: </string>
     <string name="logs">Logs: </string>
     <string name="total_volume">Total Volume: </string>
+    <string name="update_confirm_title">Log Update Confirmation: </string>
+    <string name="update_confirm_text">Would you like to update the exercise log?</string>
+    <string name="update">Update</string>
 
     <string name="delete_all">Delete All</string>
     <string name="delete_one">Delete</string>

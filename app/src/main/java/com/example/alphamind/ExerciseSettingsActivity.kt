@@ -22,18 +22,6 @@ import java.util.*
 
 class ExerciseSettingsActivity : AppCompatActivity() {
 
-//    lateinit var exerciseTextView: AutoCompleteTextView
-//    exerciseTextView = findViewById(R.id.exercise_list)
-//    lateinit var setTextView: AutoCompleteTextView
-//    setTextView = findViewById(R.id.set_number)
-//    lateinit var repTextView: AutoCompleteTextView
-//    repTextView = findViewById(R.id.rep_number)
-//    lateinit var weightTextView: AutoCompleteTextView
-//    weightTextView = findViewById(R.id.weight)
-//    lateinit var noteInputEditText: TextInputEditText
-//    noteInputEditText = findViewById(R.id.notes)
-//    lateinit var logTextView: EditText
-//    logTextView = findViewById(R.id.logs)
     var confirmedExerciseInfoUpdate: Boolean = false;
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)

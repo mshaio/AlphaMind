@@ -12,4 +12,9 @@
     <color name="autumn_light_2">#F49004</color>
     <color name="autumn_dark">#E35704</color>
     <color name="autumn_dark_1">#A92A04</color>
+    <color name="sun_set_1">#F8B195</color>
+    <color name="sun_set_2">#F67280</color>
+    <color name="sun_set_3">#C06C84</color>
+    <color name="sun_set_4">#6C5B7B</color>
+    <color name="sun_set_5">#355C7D</color>
 </resources>

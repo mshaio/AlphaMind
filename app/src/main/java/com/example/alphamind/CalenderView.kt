@@ -11,10 +11,13 @@ import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.children
+import androidx.core.view.isInvisible
 import androidx.navigation.ui.AppBarConfiguration
 import com.example.alphamind.databinding.ActivityCalenderViewBinding
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.CalendarMonth
+import com.kizitonwose.calendarview.model.DayOwner
 import com.kizitonwose.calendarview.model.InDateStyle
 import com.kizitonwose.calendarview.ui.DayBinder
 import com.kizitonwose.calendarview.ui.MonthHeaderFooterBinder
@@ -27,9 +30,11 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.YearMonth
+import java.time.format.TextStyle
 import java.time.temporal.WeekFields
 import java.util.*
 import kotlin.collections.ArrayList
+
 
 
 class CalenderView : AppCompatActivity() {
@@ -46,7 +51,7 @@ class CalenderView : AppCompatActivity() {
         val currentMonth = YearMonth.now()
         val firstMonth = currentMonth.minusMonths(2)
         val lastMonth = currentMonth.plusMonths(2)
-        val firstDayOfWeek = WeekFields.of(Locale.getDefault()).firstDayOfWeek
+//        val firstDayOfWeek = WeekFields.of(Locale.getDefault()).firstDayOfWeek
         val datesWithExercises: MutableMap<String, ArrayList<LocalDate>> = getDatesWithExercises()
 
 
@@ -69,26 +74,23 @@ class CalenderView : AppCompatActivity() {
                     for (date in exerciseDate)
                         if (day.date.equals(date)) {
                             when (exerciseType)  {
-                                "Arms" -> container.textView.setBackgroundResource(R.color.teal_200)
-                                "Back" -> container.textView.setBackgroundResource(R.color.autumn_light)
-                                "Chest" -> container.textView.setBackgroundResource(R.color.autumn_light_2)
-                                "Legs" -> container.textView.setBackgroundResource(R.color.autumn_dark)
+                                "Arms" -> container.textView.setBackgroundResource(R.drawable.calendar_arms_bg)
+                                "Back" -> container.textView.setBackgroundResource(R.drawable.calendar_back_bg)
+                                "Chest" -> container.textView.setBackgroundResource(R.drawable.calendar_chest_bg)
+                                "Legs" -> container.textView.setBackgroundResource(R.drawable.calendar_legs_bg)
                             }
                         }
                 }
+                container.textView.isInvisible = day.owner != DayOwner.THIS_MONTH
 
                 if (day.date.equals(myldt)) {
-//                    container.textView.setTextColor(Color.rgb(255,187,134))
-                    container.textView.setBackgroundResource(R.color.purple_500)
+                    container.textView.setTextColor(R.color.purple_700)
+                    container.textView.setBackgroundResource(R.drawable.calendar_today_bg)
 //                    container.textView.setBackgroundColor(R.color.purple_500)
                 }
 
             }
         }
-//        val daysOfWeek = daysOfWeekFromLocale()
-
-//        calendarView.setup(firstMonth, lastMonth, firstDayOfWeek)
-//        calendarView.scrollToMonth(currentMonth)
 
         calendarView.monthHeaderBinder = object : MonthHeaderFooterBinder<MonthViewContainer> {
             override fun create(view: View) = MonthViewContainer(view)
@@ -107,30 +109,9 @@ class CalenderView : AppCompatActivity() {
             DayOfWeek.SATURDAY
         )
 
-        println("$$$$")
-        println(daysOfWeek)
-        println("$$$$")
+
         calendarView.setup(firstMonth, lastMonth, daysOfWeek.first())
         calendarView.scrollToMonth(currentMonth)
-
-        calendarView.updateMonthConfiguration(
-            inDateStyle = InDateStyle.FIRST_MONTH,
-            maxRowCount = 6,
-            hasBoundaries = true
-        )
-    }
-
-    fun daysOfWeekFromLocale(): Array<DayOfWeek> {
-        val firstDayOfWeek = WeekFields.of(Locale.getDefault()).firstDayOfWeek
-        val daysOfWeek = DayOfWeek.values()
-        // Order `daysOfWeek` array so that firstDayOfWeek is at index 0.
-        // Only necessary if firstDayOfWeek is not DayOfWeek.MONDAY which has ordinal 0.
-        if (firstDayOfWeek != DayOfWeek.MONDAY) {
-            val rhs = daysOfWeek.sliceArray(firstDayOfWeek.ordinal..daysOfWeek.indices.last)
-            val lhs = daysOfWeek.sliceArray(0 until firstDayOfWeek.ordinal)
-            return  rhs + lhs
-        }
-        return daysOfWeek
     }
 
     private fun queryObjectInRealm(): RealmResults<ExerciseModel> {

@@ -10,9 +10,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Alphamind">
         <activity
+            android:name=".dashboard"
+            android:label="@string/title_activity_dashboard"
+            android:theme="@style/Theme.Alphamind.NoActionBar"></activity>
+        <activity
             android:name=".ChartsActivity"
             android:label="@string/title_activity_charts"
-            android:theme="@style/Theme.Alphamind.NoActionBar"></activity>
+            android:theme="@style/Theme.Alphamind.NoActionBar" />
         <activity
             android:name=".CalenderView"
             android:label="@string/title_activity_calender_view"

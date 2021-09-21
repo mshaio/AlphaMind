@@ -84,6 +84,10 @@ class MainActivity : AppCompatActivity() {
 //                    Toast.makeText(getActivity(), "Back clicked!",     Toast.LENGTH_SHORT).show();
                     true
                 }
+                R.id.charts -> {
+                    displayDashboard()
+                    true
+                }
                 R.id.delete_all -> {
 //                    deleteAllObjectsInRealm()
                     true
@@ -188,13 +192,10 @@ class MainActivity : AppCompatActivity() {
 //    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     override fun onResume() {
         super.onResume()
-        println("WWW")
         prepareItems()
     }
 
     private fun prepareItems() {
-        println("QQQ")
-        println(queryObjectInRealm())
         for (item in queryObjectInRealm()) {
             if (!dateList.contains(item.date)) {
                 itemsList.add(item.exerciseType)
@@ -273,6 +274,12 @@ class MainActivity : AppCompatActivity() {
 
     fun displayCalenderView() {
         val intent = Intent(this, CalenderView::class.java)
+        startActivity(intent)
+    }
+
+    fun displayDashboard() {
+        println("2222222")
+        val intent = Intent(this, dashboard::class.java)
         startActivity(intent)
     }
 }

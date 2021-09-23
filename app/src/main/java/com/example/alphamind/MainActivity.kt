@@ -88,6 +88,34 @@ class MainActivity : AppCompatActivity() {
                     displayDashboard()
                     true
                 }
+                R.id.arms_filter -> {
+                    filterExercises("Arms")
+                    true
+                }
+                R.id.back_filter -> {
+                    filterExercises("Back")
+                    true
+                }
+                R.id.chest_filter -> {
+                    filterExercises("Chest")
+                    true
+                }
+                R.id.legs_filter  -> {
+                    filterExercises("Legs")
+                    true
+                }
+                R.id.pull_filter -> {
+                    filterExercises("Pull")
+                    true
+                }
+                R.id.push_filter -> {
+                    filterExercises("Push")
+                    true
+                }
+                R.id.all -> {
+                    filterExercises()
+                    true
+                }
                 R.id.delete_all -> {
 //                    deleteAllObjectsInRealm()
                     true
@@ -195,8 +223,12 @@ class MainActivity : AppCompatActivity() {
         prepareItems()
     }
 
-    private fun prepareItems() {
-        for (item in queryObjectInRealm()) {
+    private fun prepareItems(exerciseType: String? = "") {
+        itemsList.clear()
+        dateList.clear()
+        selectionList.clear()
+        filteredItemsList.clear()
+        for (item in queryObjectInRealm(exerciseType)) {
             if (!dateList.contains(item.date)) {
                 itemsList.add(item.exerciseType)
                 dateList.add(item.date!!)
@@ -204,7 +236,6 @@ class MainActivity : AppCompatActivity() {
                 filteredItemsList.add(item.exerciseType)
             }
         }
-//        filteredItemsList.addAll(itemsList)
         customAdapter.notifyDataSetChanged()
     }
 
@@ -230,12 +261,22 @@ class MainActivity : AppCompatActivity() {
                 || super.onSupportNavigateUp()
     }
 
-    private fun queryObjectInRealm(): RealmResults<ExerciseModel> {
+    private fun queryObjectInRealm(exerciseType: String? = ""): RealmResults<ExerciseModel> {
         Realm.init(this)
         val realm = Realm.getDefaultInstance()
-        val activities = realm.where(ExerciseModel::class.java).sort("date", Sort.DESCENDING).findAll()
-        println(activities.javaClass.name)
+        lateinit var activities: RealmResults<ExerciseModel>
+        if (exerciseType?.length!! == 0) {
+            println("length is 0")
+            activities = realm.where(ExerciseModel::class.java).sort("dateDate", Sort.DESCENDING).findAll()
+        } else {
+            println("length is not 0")
+            activities = realm.where(ExerciseModel::class.java).sort("dateDate", Sort.DESCENDING).equalTo("exerciseType",exerciseType).findAll()
+        }
         return activities
+    }
+
+    private fun filterExercises(visibleExerciseType: String? = "") {
+        prepareItems(visibleExerciseType)
     }
 
     private fun deleteActivity(selections: ArrayList<Boolean>) {

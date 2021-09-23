@@ -367,9 +367,6 @@ class ExerciseSettingsActivity : AppCompatActivity() {
     }
 
     private fun gotoCharts(date: String, dateDate: String) {
-//        val intent = Intent(this, ExeciseForm::class.java)
-////            intent.putExtra("key",value)
-//            startActivity(intent)
         val intent = Intent(this, ChartsActivity::class.java)
         println("%A%")
         println(dateDate)

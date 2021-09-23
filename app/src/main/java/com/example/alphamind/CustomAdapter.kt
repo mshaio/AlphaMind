@@ -2,10 +2,12 @@ package com.example.alphamind
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.core.content.ContextCompat.startActivity
@@ -22,6 +24,7 @@ internal class CustomAdapter(private var mContext: Context, private var itemsLis
         var itemTextView: TextView = view.findViewById(R.id.exercise_type)
         var dateTextView: TextView = view.findViewById(R.id.date)
         var selectedItem: SwitchMaterial = view.findViewById(R.id.unique_item)
+        var itemLayout: LinearLayout = view.findViewById(R.id.item)
 
         init {
             itemView.setOnClickListener { v: View ->
@@ -44,10 +47,7 @@ internal class CustomAdapter(private var mContext: Context, private var itemsLis
 
             selectedItem.setOnClickListener { v: View ->
                 val position: Int = adapterPosition
-                println("@@@")
                 selectionList[position] = selectedItem.isChecked
-                println(selectionList)
-                println("###")
             }
         }
     }
@@ -86,6 +86,20 @@ internal class CustomAdapter(private var mContext: Context, private var itemsLis
         val item = itemsList[position]
         holder.itemTextView.text = item
         holder.dateTextView.text =  dateList[position]
+//        holder.itemLayout.setBackgroundColor(Color.rgb(166,166,166))
+
+        val exerciseType = holder.itemTextView.text
+        when (exerciseType) {
+//            "Arms" -> holder.itemTextView.setTextColor(Color.rgb(246,114,128))
+//            "Back" -> holder.itemTextView.setTextColor(Color.rgb(248,177,149))
+//            "Chest" -> holder.itemTextView.setTextColor(Color.rgb(192,108,132))
+//            "Legs" -> holder.itemTextView.setTextColor(Color.rgb(53,92,125))
+            "Arms" -> holder.itemLayout.setBackgroundColor(Color.rgb(246,114,128))
+            "Back" -> holder.itemLayout.setBackgroundColor(Color.rgb(248,177,149))
+            "Chest" -> holder.itemLayout.setBackgroundColor(Color.rgb(192,108,132))
+            "Legs" -> holder.itemLayout.setBackgroundColor(Color.rgb(53,92,125))
+        }
+
     }
     override fun getItemCount(): Int {
         return itemsList.size

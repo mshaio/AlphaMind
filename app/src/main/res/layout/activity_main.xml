@@ -64,7 +64,7 @@
                 android:layout_margin="@dimen/fab_margin"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
-                app:backgroundTint="@color/autumn_dark"
+                app:backgroundTint="@color/feather_grey"
                 app:srcCompat="@android:drawable/ic_menu_add" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -75,7 +75,7 @@
                 android:layout_margin="@dimen/fab_margin"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentLeft="true"
-                app:backgroundTint="@color/autumn_dark"
+                app:backgroundTint="@color/feather_grey"
                 app:srcCompat="@android:drawable/ic_menu_agenda" />
 
         </RelativeLayout>

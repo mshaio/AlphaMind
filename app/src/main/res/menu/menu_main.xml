@@ -19,6 +19,41 @@
         android:title="@string/delete_one"
         app:showAsAction="never" />
     <item
+        android:id="@+id/all"
+        android:orderInCategory="100"
+        android:title="@string/all_exercises"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/arms_filter"
+        android:orderInCategory="100"
+        android:title="@string/arms_filter"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/back_filter"
+        android:orderInCategory="100"
+        android:title="@string/back_filter"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/chest_filter"
+        android:orderInCategory="100"
+        android:title="@string/chest_filter"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/legs_filter"
+        android:orderInCategory="100"
+        android:title="@string/legs_filter"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/pull_filter"
+        android:orderInCategory="100"
+        android:title="@string/pull_filter"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/push_filter"
+        android:orderInCategory="100"
+        android:title="@string/push_filter"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/save_log"
         android:icon="@drawable/ic_baseline_add_box_24"
         app:showAsAction="always"

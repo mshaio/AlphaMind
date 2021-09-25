@@ -305,7 +305,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun deleteSelectedObjectsInRealm(date: String) {
+    private fun deleteSelectedObjectsInRealm(date: String) {
         Realm.init(this)
         val realm = Realm.getDefaultInstance()
         realm.beginTransaction()
@@ -313,7 +313,7 @@ class MainActivity : AppCompatActivity() {
         realm.commitTransaction()
     }
 
-    fun displayCalenderView() {
+    private fun displayCalenderView() {
         val intent = Intent(this, CalenderView::class.java)
         startActivity(intent)
     }

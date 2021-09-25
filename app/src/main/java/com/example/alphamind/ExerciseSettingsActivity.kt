@@ -89,7 +89,7 @@ class ExerciseSettingsActivity : AppCompatActivity() {
 //        val logAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, weights)
 //        logView.setAdapter(logAdapter)
         logView.setOnClickListener {
-            confirmExerciseUpdate()
+            confirmExerciseUpdate(realDate)
         }
 
         lateinit var topAppBar: MaterialToolbar
@@ -142,17 +142,40 @@ class ExerciseSettingsActivity : AppCompatActivity() {
         }
     }
 
-    private fun confirmExerciseUpdate() {
+    private fun confirmExerciseUpdate(date: Date) {
+        var daysActivity = queryObjectInRealmForGivenDate(date)
+        var exerciseItems = arrayOf<String>()
+        var exerciseObjectId = arrayOf<ObjectId>()
+        val checkedItem = 0
+        var selectedExercise: String = ' '.toString()
+
+        for (activities in daysActivity) {
+            exerciseItems += "Set " + activities.sets + " " + activities.activity
+            exerciseObjectId += activities._id
+        }
+
         MaterialAlertDialogBuilder(this)
-            .setTitle(resources.getString(R.string.title))
-            .setMessage(resources.getString(R.string.update_confirm_text))
-            .setNeutralButton(resources.getString(R.string.cancel)) { dialog, which ->
+            .setTitle(resources.getString(R.string.exercises_for_the_day))
+            .setNegativeButton(resources.getString(R.string.cancel)) { dialog, which ->
                 // Respond to neutral button press
-                confirmedExerciseInfoUpdate = false
             }
-            .setPositiveButton(resources.getString(R.string.accept)) { dialog, which ->
+            .setPositiveButton(resources.getString(R.string.delete)) { dialog, which ->
                 // Respond to positive button press
-                confirmedExerciseInfoUpdate = true
+                deleteObjectInRealm(exerciseObjectId[exerciseItems.indexOf(selectedExercise)])
+                var logTextView: EditText = findViewById(R.id.logs)
+                var existingLogs: String = ""
+//                logTextView.text.toString().replace("Set".toRegex(),"Sets")
+
+                for (activity in queryObjectInRealmForGivenDate(date)) {
+                    existingLogs += "Set " + activity.sets + " Reps " + activity.reps + " Weight " + activity.weights + "lb " + activity.activity + "\n"
+                }
+                logTextView.setText(existingLogs)
+            }
+            .setSingleChoiceItems(exerciseItems, checkedItem) { dialog, which ->
+                // Respond to item chosen
+                println(exerciseItems[which])
+                selectedExercise = exerciseItems[which]
+
             }
             .show()
     }
@@ -162,7 +185,7 @@ class ExerciseSettingsActivity : AppCompatActivity() {
         var newLog = ""
         var detectedUpdates = false
         for (i in existingLog.lines().dropLast(1)) {
-//          Examplie of i: Set 1 Reps 1 Weight 180lb Squats
+//          Example of i: Set 1 Reps 1 Weight 180lb Squats
             if (newSet == i.split(' ')[1] && newActivity.toRegex().containsMatchIn(i)) {
                 newLog += i.replace(i.substringAfterLast("Reps "), newRep)
                 newLog += " Weight "
@@ -257,9 +280,10 @@ class ExerciseSettingsActivity : AppCompatActivity() {
 
     fun deleteObjectInRealm(id: ObjectId) {
         Realm.init(this)
-        val real = Realm.getDefaultInstance()
-        real.beginTransaction()
-        real.where(ExerciseModel::class.java).equalTo("_id", ObjectId())
+        val realm = Realm.getDefaultInstance()
+        realm.beginTransaction()
+        realm.where(ExerciseModel::class.java).equalTo("_id", id).findFirst()!!.deleteFromRealm()
+        realm.commitTransaction()
     }
 
     private fun deleteAllObjectsInRealm() {
@@ -274,10 +298,10 @@ class ExerciseSettingsActivity : AppCompatActivity() {
         realm.commitTransaction()
     }
 
-    private fun queryObjectInRealm(): RealmResults<ExerciseModel> {
+    private fun queryObjectInRealmForGivenDate(date: Date): RealmResults<ExerciseModel> {
         Realm.init(this)
         val realm = Realm.getDefaultInstance()
-        val activities = realm.where(ExerciseModel::class.java).findAll()
+        val activities = realm.where(ExerciseModel::class.java).equalTo("dateDate",date).findAll()
 //            .equalTo("_id", ObjectId.get()).findAll()
         return activities
     }
@@ -347,7 +371,6 @@ class ExerciseSettingsActivity : AppCompatActivity() {
         var logTextView: EditText = findViewById(R.id.logs)
         var totalVolumeTextView: EditText = findViewById(R.id.total_volume)
 
-//        val existingActivity: RealmResults<ExerciseModel> = queryObjectInRealm()
         val existingActivity: RealmResults<ExerciseModel> = getActivitiesByDate(exerciseDate)
         var selectedItemPosition = intent.getIntExtra("selected",0)
 

@@ -14,8 +14,10 @@
     <string name="title">Title</string>
     <string name="cancel">Cancel</string>
     <string name="accept">Accept</string>
+    <string name="delete">Delete</string>
     <string name="page_title">AlphaMind</string>
     <string name="title_activity_exercise_settings">ExerciseSettingsActivity</string>
+    <string name="exercises_for_the_day">Exercises for the day</string>
 
     <string name="exercise_type">Exercise: </string>
     <string name="set_number">Set #:</string>

@@ -23,6 +23,31 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class dashboard : AppCompatActivity() {
+    object ActivityConstants {
+        const val BICEPT_CURLS = "Bicep Curls"
+        const val CABLES_BICEPT_CURLS = "Cables Bicep Curls"
+        const val CABLES_DOWN = "Cables (down)"
+        const val CABLES_UP = "Cables (up)"
+        const val DEAD_LIFT = "Dead Lift"
+        const val DECLINE_BENCH_PRESS = "Decline Bench Press"
+        const val DUMBBELL_ROW = "Dumbbell Row"
+        const val FLAT_BENCH_PRESS = "Flat Bench Press"
+        const val INCLINE_BENCH_PRESS = "Incline Bench Press"
+        const val LAT_PRESSDOWN = "Lat Pressdown"
+        const val LAT_PULLDOWN = "Lat Pulldown"
+        const val LEG_CURLS = "Leg Curls"
+        const val LEG_EXTENSION = "Leg Extension"
+        const val LEG_PRESS = "Leg Press"
+        const val PEC_DECK = "Pec Deck"
+        const val PULL_UP = "Pull-up"
+        const val ROW = "Row"
+        const val TRICEP_EXT_CABLE = "Tricep Extension (Cable)"
+        const val TRICEP_EXT_DUMBBELL = "Tricep Extension (Dumbbell)"
+        const val TRICEP_PUSHDOWN = "Tricep Pushdown"
+        const val SEATED_CABLE_ROW = "Seated Cable Row"
+        const val SHRUGS = "Shrugs"
+        const val SQUATS = "Squats"
+    }
 
     private lateinit var appBarConfiguration: AppBarConfiguration
 //    private lateinit var binding: ActivityDashboardBinding
@@ -69,6 +94,17 @@ class dashboard : AppCompatActivity() {
         return activities
     }
 
+    private fun queryMaxObjectInRealm(queryField: String, queryValue: String = ""): Int {
+        //Queries the database to get the maximum weight lifted for a given activity type, ie Bicep Curls
+        Realm.init(this)
+        val realm = Realm.getDefaultInstance()
+        return if (realm.where(ExerciseModel::class.java).equalTo(queryField,queryValue).sort("weights",Sort.DESCENDING).findAll().size > 0)
+            realm.where(ExerciseModel::class.java).equalTo(queryField,queryValue).sort("weights",Sort.DESCENDING).findFirst()!!.weights
+        else {
+            0
+        }
+    }
+
     private fun queryObjectInRealmInMonth(startOfMonth: Date, endOfMonth: Date, queryField: String? = "", queryValue: String? = ""): RealmResults<ExerciseModel> {
         Realm.init(this)
         val realm = Realm.getDefaultInstance()
@@ -86,11 +122,50 @@ class dashboard : AppCompatActivity() {
         lateinit var lineData: LineData
         lateinit var lineDataSet: LineDataSet
         var lineEntries: ArrayList<Entry> = ArrayList<Entry>()
-        lineEntries.add(Entry(0F,1F))
-        lineEntries.add(Entry(1F,2F))
-        lineEntries.add(Entry(2F,1F))
-        lineEntries.add(Entry(4F,3F))
-        lineEntries.add(Entry(5F,2F))
+        val exercises = listOf(
+            "Bicep Curls",
+            "Cables Bicep Curls",
+            "Cables (down)",
+            "Cables (up)",
+            "Dead Lift",
+            "Decline Bench Press",
+            "Dumbbell Row",
+            "Flat Bench Press",
+            "Incline Bench Press",
+            "Lat Pressdown",
+            "Lat Pulldown",
+            "Leg Curls",
+            "Leg Extension",
+            "Leg Press",
+            "Pec Deck",
+            "Pull-up",
+            "Row",
+            "Tricep Extension (Cable)",
+            "Tricep Extension (Dumbbell)",
+            "Tricep Pushdown",
+            "Seated Cable Row",
+            "Shrugs",
+            "Squats",
+        )
+
+        for (exerciseIndex in 0..exercises.size-1) {
+            lineEntries.add(Entry(exerciseIndex.toFloat(),queryMaxObjectInRealm("activity",exercises[exerciseIndex]).toFloat()))
+        }
+//        lineEntries.add(Entry(0F,1F))
+//        lineEntries.add(Entry(1F,2F))
+//        lineEntries.add(Entry(2F,1F))
+//        lineEntries.add(Entry(4F,3F))
+//        lineEntries.add(Entry(5F,2F))
+//        lineEntries.add(Entry(6F,1F))
+//        lineEntries.add(Entry(7F,2F))
+//        lineEntries.add(Entry(8F,1F))
+//        lineEntries.add(Entry(9F,3F))
+//        lineEntries.add(Entry(10F,2F))
+//        lineEntries.add(Entry(11F,1F))
+//        lineEntries.add(Entry(12F,2F))
+//        lineEntries.add(Entry(13F,1F))
+//        lineEntries.add(Entry(14F,3F))
+//        lineEntries.add(Entry(15F,2F))
 
         lineDataSet = LineDataSet(lineEntries,"")
         lineData = LineData(lineDataSet)

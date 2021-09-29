@@ -3,6 +3,7 @@ package com.example.alphamind
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
@@ -36,10 +37,29 @@ class dashboard : AppCompatActivity() {
         var radarChart: RadarChart = findViewById(R.id.radar_chart)
         var radarChart2: RadarChart = findViewById(R.id.radar_chart2)
         exerciseTypeTotalCount(radarChart)
-        exerciseTypeTotalCountForThisMonth(radarChart2)
+        exerciseTypeTotalCountForThisMonthAndLast(radarChart2)
 
         var cubicChart: LineChart = findViewById(R.id.cubic_chart)
         cubicChart(cubicChart)
+
+        var daysExercised: TextView = findViewById(R.id.tv_total_days_exercised)
+        var daysExercisedThisMonth: TextView = findViewById(R.id.tv_total_days_exercised_this_month)
+        var daysExercisedLastMonth: TextView = findViewById(R.id.tv_total_days_exercised_last_month)
+        daysExercised.text = getNumberOfDaysExercised(queryObjectInRealm())
+        daysExercisedThisMonth.text = getNumberOfDaysExercisedThisMonth()
+        daysExercisedLastMonth.text = getNumberOfDaysExercisedThisMonth("LAST")
+        if (daysExercised.length() > 2) {
+            daysExercised.textSize = 50f
+        } else if (daysExercised.length() > 3) {
+            daysExercised.textSize = 40f
+        }
+    }
+
+    private fun queryObjectInRealm(): RealmResults<ExerciseModel> {
+        Realm.init(this)
+        val realm = Realm.getDefaultInstance()
+        val activities = realm.where(ExerciseModel::class.java).sort("date", Sort.DESCENDING).findAll()
+        return activities
     }
 
     private fun queryObjectInRealm(queryField: String, queryValue: String = ""): RealmResults<ExerciseModel> {
@@ -49,10 +69,16 @@ class dashboard : AppCompatActivity() {
         return activities
     }
 
-    private fun queryObjectInRealmInMonth(startOfMonth: Date, endOfMonth: Date, queryField: String, queryValue: String): RealmResults<ExerciseModel> {
+    private fun queryObjectInRealmInMonth(startOfMonth: Date, endOfMonth: Date, queryField: String? = "", queryValue: String? = ""): RealmResults<ExerciseModel> {
         Realm.init(this)
         val realm = Realm.getDefaultInstance()
-        val activities = realm.where(ExerciseModel::class.java).greaterThanOrEqualTo("dateDate",startOfMonth).lessThan("dateDate",endOfMonth).equalTo(queryField,queryValue).findAll()
+        lateinit var activities: RealmResults<ExerciseModel>
+        activities = if (queryField!!.isEmpty() || queryValue!!.isEmpty()) {
+            realm.where(ExerciseModel::class.java).greaterThanOrEqualTo("dateDate",startOfMonth).lessThanOrEqualTo("dateDate",endOfMonth).findAll()
+        } else {
+            realm.where(ExerciseModel::class.java).greaterThanOrEqualTo("dateDate",startOfMonth).lessThanOrEqualTo("dateDate",endOfMonth).equalTo(queryField,queryValue).findAll()
+        }
+
         return activities
     }
 
@@ -81,10 +107,14 @@ class dashboard : AppCompatActivity() {
         lineDataSet.mode = LineDataSet.Mode.CUBIC_BEZIER
     }
 
-    private fun radarChart(radarChart: RadarChart, data: ArrayList<Int>) {
+    private fun radarChart(radarChart: RadarChart, data: ArrayList<Int>, lastMonthsData: ArrayList<Int>) {
         var entries: ArrayList<RadarEntry> = ArrayList<RadarEntry>()
+        var lastMonthsEntries: ArrayList<RadarEntry> = ArrayList<RadarEntry>()
         for (i in data) {
             entries.add(RadarEntry(i.toFloat()))
+        }
+        for (i in lastMonthsData) {
+            lastMonthsEntries.add(RadarEntry(i.toFloat()))
         }
         var radarDataSet = RadarDataSet(entries, " ")
         radarDataSet.setColors(Color.rgb(248,177,149))
@@ -92,8 +122,15 @@ class dashboard : AppCompatActivity() {
         radarDataSet.setValueTextColor(Color.rgb(248,177,149))
         radarDataSet.setValueTextSize(0f)
 
+        var radarDataSet2 = RadarDataSet(lastMonthsEntries," ")
+        radarDataSet2.setColors(Color.rgb(246,114,128))
+        radarDataSet2.setLineWidth(2f)
+        radarDataSet2.setValueTextColor(Color.rgb(246,114,128))
+        radarDataSet2.setValueTextSize(0f)
+
         var radarData: RadarData = RadarData()
         radarData.addDataSet(radarDataSet)
+        radarData.addDataSet(radarDataSet2)
 
         var labels: ArrayList<String> = ArrayList<String>()
         labels.add("Arms")
@@ -114,9 +151,10 @@ class dashboard : AppCompatActivity() {
         radarChart.setData(radarData)
     }
 
-    private fun exerciseTypeTotalCountForThisMonth(radarChart: RadarChart) {
+    private fun exerciseTypeTotalCountForThisMonthAndLast(radarChart: RadarChart) {
         val EXERCISE_TYPES = arrayListOf<String>("Arms","Back","Chest","Legs","Push","Pull")
         var exerciseTypesCountThisMonth = arrayListOf<Int>()
+        val exerciseTypesCountLastMonth = arrayListOf<Int>()
 
         val defaultZoneId = ZoneId.systemDefault()
         val date = Calendar.getInstance()
@@ -125,10 +163,16 @@ class dashboard : AppCompatActivity() {
         val firstOfThisMonth = Date.from(LocalDate.of(year,month,1).atStartOfDay(defaultZoneId).toInstant())
         val lastDayOfThisMonth = Date.from(LocalDate.of(year,month,date.getActualMaximum(Calendar.DAY_OF_MONTH)).atStartOfDay(defaultZoneId).toInstant())
 
+        val lastMonth = date.get(Calendar.MONTH)
+        val lastMonthLength = LocalDate.of(year,lastMonth,1).lengthOfMonth()
+        val firstOfLastMonth = Date.from(LocalDate.of(year,lastMonth,1).atStartOfDay(defaultZoneId).toInstant())
+        val lastDayofLastMonth = Date.from(LocalDate.of(year,lastMonth,lastMonthLength).atStartOfDay(defaultZoneId).toInstant())
+
         for (exerciseType in EXERCISE_TYPES) {
             exerciseTypesCountThisMonth.add(queryObjectInRealmInMonth(firstOfThisMonth,lastDayOfThisMonth,"exerciseType",exerciseType).size)
+            exerciseTypesCountLastMonth.add(queryObjectInRealmInMonth(firstOfLastMonth,lastDayofLastMonth,"exerciseType",exerciseType).size)
         }
-        radarChart(radarChart,exerciseTypesCountThisMonth)
+        radarChart(radarChart,exerciseTypesCountThisMonth, exerciseTypesCountLastMonth)
     }
 
     private fun exerciseTypeTotalCount(radarChart: RadarChart) {
@@ -137,7 +181,7 @@ class dashboard : AppCompatActivity() {
         for (exerciseType in EXERCISE_TYPES) {
             exerciseTypesCount.add(queryObjectInRealm("exerciseType",exerciseType).size)
         }
-        radarChart(radarChart,exerciseTypesCount)
+        radarChart(radarChart,exerciseTypesCount, arrayListOf())
 
 //        var entries: ArrayList<RadarEntry> = ArrayList<RadarEntry>();
 //        entries.add(RadarEntry(220F))
@@ -186,6 +230,47 @@ class dashboard : AppCompatActivity() {
 //        radarChart.yAxis.textColor = Color.rgb(246,114,128)
 ////        radarChart.legend.textColor = Color.rgb(246,114,128)
 //        radarChart.setData(radarData)
+    }
+
+    private fun getStrengthToWeightRatio() {
+        
+    }
+
+    private fun getNumberOfDaysExercised(allActivities: RealmResults<ExerciseModel>): String {
+        var daysExercised = arrayListOf<Date>()
+        for (activity in allActivities) {
+            if (!(activity.dateDate in daysExercised)) {
+                daysExercised.add(activity.dateDate!!)
+            }
+        }
+        return daysExercised.size.toString()
+    }
+
+    private fun getNumberOfDaysExercisedThisMonth(monthStatus: String = "CURRENT"): String {
+        val defaultZoneId = ZoneId.systemDefault()
+        val date = Calendar.getInstance()
+        var year = date.get(Calendar.YEAR)
+        var month = date.get(Calendar.MONTH) + 1 //Not sure why Calendar.Month returns 1 month less
+        if (monthStatus != "CURRENT") {
+            month -= 1
+            if (month == 0) {
+                month = 12
+                year -= 1
+            }
+        }
+
+        val monthLength = LocalDate.of(year,month,1).lengthOfMonth()
+        val firstOfThisMonth = Date.from(LocalDate.of(year,month,1).atStartOfDay(defaultZoneId).toInstant())
+        val lastDayOfThisMonth = Date.from(LocalDate.of(year,month,monthLength).atStartOfDay(defaultZoneId).toInstant())
+        var daysExercisedThisMonth = arrayListOf<Date>()
+
+        for (activity in queryObjectInRealmInMonth(firstOfThisMonth,lastDayOfThisMonth)) {
+            if (activity.dateDate !in daysExercisedThisMonth) {
+                daysExercisedThisMonth.add(activity.dateDate!!)
+            }
+        }
+        return daysExercisedThisMonth.size.toString()
+
     }
 
     override fun onSupportNavigateUp(): Boolean {

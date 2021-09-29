@@ -54,6 +54,15 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textViewTitle"
                     app:layout_constraintVertical_bias="10.0" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:textSize="20sp"
+                    android:gravity="bottom|center"
+                    android:textColor="@color/autumn_light"
+                    android:text="Sets All Time"/>
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
@@ -76,6 +85,15 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textViewTitle"
                     app:layout_constraintVertical_bias="10.0" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:textSize="20sp"
+                    android:gravity="bottom|center"
+                    android:textColor="@color/autumn_light"
+                    android:text="Sets Current vs Previous Month"/>
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
 
@@ -137,6 +155,14 @@
                     android:textColor="@color/autumn_light"
                     android:text="33"/>
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:textSize="25sp"
+                    android:gravity="bottom|center"
+                    android:textColor="@color/autumn_light"
+                    android:text="Total"/>
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
@@ -195,10 +221,10 @@
                     android:textSize="25sp"
                     android:gravity="top|top|center"
                     android:textColor="@color/purple_200"
-                    android:text="Days Missed"/>
+                    android:text="Days Exercised"/>
 
                 <TextView
-                    android:id="@+id/tv_days_since_last_exercise"
+                    android:id="@+id/tv_total_days_exercised_last_month"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_centerInParent="true"
@@ -206,6 +232,15 @@
                     android:gravity="center"
                     android:textColor="@color/purple_200"
                     android:text="2"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:textSize="25sp"
+                    android:gravity="bottom|center"
+                    android:textColor="@color/purple_200"
+                    android:text="Last Month"/>
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
 

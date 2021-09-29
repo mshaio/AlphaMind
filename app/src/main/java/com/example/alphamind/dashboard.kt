@@ -149,23 +149,9 @@ class dashboard : AppCompatActivity() {
         )
 
         for (exerciseIndex in 0..exercises.size-1) {
+            //lineEntries.add(Entry(0F,1F))
             lineEntries.add(Entry(exerciseIndex.toFloat(),queryMaxObjectInRealm("activity",exercises[exerciseIndex]).toFloat()))
         }
-//        lineEntries.add(Entry(0F,1F))
-//        lineEntries.add(Entry(1F,2F))
-//        lineEntries.add(Entry(2F,1F))
-//        lineEntries.add(Entry(4F,3F))
-//        lineEntries.add(Entry(5F,2F))
-//        lineEntries.add(Entry(6F,1F))
-//        lineEntries.add(Entry(7F,2F))
-//        lineEntries.add(Entry(8F,1F))
-//        lineEntries.add(Entry(9F,3F))
-//        lineEntries.add(Entry(10F,2F))
-//        lineEntries.add(Entry(11F,1F))
-//        lineEntries.add(Entry(12F,2F))
-//        lineEntries.add(Entry(13F,1F))
-//        lineEntries.add(Entry(14F,3F))
-//        lineEntries.add(Entry(15F,2F))
 
         lineDataSet = LineDataSet(lineEntries,"")
         lineData = LineData(lineDataSet)
@@ -180,6 +166,12 @@ class dashboard : AppCompatActivity() {
         lineDataSet.setDrawFilled(true)
 //        lineDataSet.setDrawValues(false)
         lineDataSet.mode = LineDataSet.Mode.CUBIC_BEZIER
+        lineDataSet.setDrawHorizontalHighlightIndicator(false)
+        lineDataSet.setDrawVerticalHighlightIndicator(false)
+
+        val marker = CustomMarkerView(this, R.layout.custom_marker_view, exercises)
+        cubicChart.marker = marker
+        cubicChart.xAxis.setDrawLabels(false)
     }
 
     private fun radarChart(radarChart: RadarChart, data: ArrayList<Int>, lastMonthsData: ArrayList<Int>) {

@@ -39,6 +39,7 @@
     <string name="pull_filter">Pull Only</string>
     <string name="push_filter">Push Only</string>
     <string name="all_exercises">All Exercises</string>
+    <string name="remote_save">Save To Cloud</string>
 
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>
@@ -59,4 +60,8 @@
     <string name="tab_text_1">Tab 1</string>
     <string name="tab_text_2">Tab 2</string>
     <string name="title_activity_dashboard">dashboard</string>
+    <string name="title_activity_authentication">Authentication</string>
+
+    <!-- For Firebase Google Auth -->
+<!--    <string name="default_web_client_id">86428497661-qs4p0barmpfupmterlmoa822kbrek43v.apps.googleusercontent.com</string>-->
 </resources>

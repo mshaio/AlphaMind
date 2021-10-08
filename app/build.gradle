@@ -5,6 +5,8 @@ plugins {
     id 'realm-android'
 }
 
+apply plugin: 'com.google.gms.google-services'  // Google Services plugin
+
 android {
     compileSdkVersion 29
 
@@ -63,4 +65,16 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
     implementation 'com.github.kizitonwose:CalendarView:1.0.4'
+
+    // Import the Firebase BoM
+    implementation platform('com.google.firebase:firebase-bom:28.4.1')
+    // Declare the dependency for the Firebase SDK for Google Analytics
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+    // Declare the dependencies for any other desired Firebase products
+    // For example, declare the dependencies for Firebase Authentication and Cloud Firestore
+    implementation 'com.google.firebase:firebase-auth-ktx'
+    implementation 'com.google.firebase:firebase-firestore-ktx'
+
+    implementation 'com.google.android.gms:play-services-auth:19.2.0'
+
 }

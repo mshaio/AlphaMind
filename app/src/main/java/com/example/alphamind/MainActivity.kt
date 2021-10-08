@@ -17,12 +17,14 @@ import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.SearchView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.appbar.MaterialToolbar
 //import com.example.alphamind.databinding.ActivityMainBinding
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -30,14 +32,19 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.tabs.TabLayout
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import java.util.*
 import kotlin.collections.ArrayList
 
 import io.realm.Realm
+import io.realm.RealmObject
 import io.realm.RealmResults
 import io.realm.Sort
+import io.realm.annotations.PrimaryKey
 import org.bson.types.ObjectId
 import java.util.zip.Inflater
+import kotlin.collections.HashMap
 
 class MainActivity : AppCompatActivity() {
 
@@ -126,6 +133,14 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.calendar_view -> {
                     displayCalenderView()
+                    true
+                }
+                R.id.action_settings -> {
+                    displayGoogleSignIn()
+                    true
+                }
+                R.id.save_to_firestore -> {
+                    saveDataToCloud()
                     true
                 }
                 else -> false
@@ -318,9 +333,59 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    fun displayDashboard() {
+    private fun displayDashboard() {
         println("2222222")
         val intent = Intent(this, dashboard::class.java)
         startActivity(intent)
+    }
+
+    private fun displayGoogleSignIn() {
+        val intent = Intent(this, Authentication::class.java)
+        startActivity(intent)
+    }
+
+    private fun saveDataToCloud() {
+        val activitiesInRealm = queryObjectInRealm()
+        val db= FirebaseFirestore.getInstance()
+
+        data class ExerciseData(
+            var activity: String = "",
+            var exerciseType: String = "",
+            var _id: String = ObjectId().toString(),
+            var sets: Int = 0,
+            var reps: Int = 0,
+            var weights: Int = 0,
+            var date: String? = null,
+            var dateDate: Date? = null,
+            var notes: String? = null
+        )
+
+//        val city = hashMapOf(
+//            "name" to "Los Angeles",
+//            "state" to "CA",
+//            "country" to "USA"
+//        )
+//        db.collection("cities").document("LA")
+//            .set(city)
+//            .addOnSuccessListener { Toast.makeText(this,"DocumentSnapshot successfully written!", Toast.LENGTH_LONG).show() }
+//            .addOnFailureListener { e -> println(e) }
+
+        val exerciseDataFromMobile: HashMap<String, Any> = hashMapOf()
+        val map: HashMap<Any, Any> = hashMapOf("capital" to true)
+        for (activityInRealm in activitiesInRealm) {
+            var exerciseDataForCloud = ExerciseData(activityInRealm.activity,
+                                                    activityInRealm.exerciseType,
+                                                    activityInRealm._id.toString(),
+                                                    activityInRealm.sets,
+                                                    activityInRealm.reps,
+                                                    activityInRealm.weights,
+                                                    activityInRealm.date,
+                                                    activityInRealm.dateDate,
+                                                    activityInRealm.notes)
+            db.collection("ExerciseData").document("user_name_"+activityInRealm._id.toString())
+                .set(exerciseDataForCloud, SetOptions.merge())
+                .addOnSuccessListener { Toast.makeText(this,"Data Transferring, Please Wait", Toast.LENGTH_SHORT).show() }
+                .addOnFailureListener { e -> println(e) }
+        }
     }
 }

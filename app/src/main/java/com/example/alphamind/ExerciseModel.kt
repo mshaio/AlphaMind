@@ -14,7 +14,8 @@ open class ExerciseModel(var activity: String = "",
                          var weights: Int = 0,
                          var date: String? = null,
                          var dateDate: Date? = null,
-                         var notes: String? = null): RealmObject()
+                         var notes: String? = null,
+                         var savedInCloud: Boolean = false): RealmObject()
 
 
 //class ExerciseModel {

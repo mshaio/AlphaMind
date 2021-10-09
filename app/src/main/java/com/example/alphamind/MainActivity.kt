@@ -290,6 +290,12 @@ class MainActivity : AppCompatActivity() {
         return activities
     }
 
+    private fun queryObjectInRealmRequiresCloudUpdate():RealmResults<ExerciseModel> {
+        Realm.init(this)
+        val realm = Realm.getDefaultInstance()
+        return realm.where(ExerciseModel::class.java).sort("dateDate",Sort.DESCENDING).equalTo("savedInCloud",false).findAll()
+    }
+
     private fun filterExercises(visibleExerciseType: String? = "") {
         prepareItems(visibleExerciseType)
     }
@@ -344,9 +350,17 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    private fun upsertObjectInRealm(activityToUpsert: ExerciseModel) {
+        Realm.init(this)
+        val realm = Realm.getDefaultInstance()
+        realm.beginTransaction()
+        realm.insertOrUpdate(activityToUpsert)
+        realm.commitTransaction()
+    }
+
     private fun saveDataToCloud() {
-        val activitiesInRealm = queryObjectInRealm()
-        val db= FirebaseFirestore.getInstance()
+        val activitiesInRealm = queryObjectInRealmRequiresCloudUpdate() //queryObjectInRealm()
+        val db = FirebaseFirestore.getInstance()
 
         data class ExerciseData(
             var activity: String = "",
@@ -370,22 +384,40 @@ class MainActivity : AppCompatActivity() {
 //            .addOnSuccessListener { Toast.makeText(this,"DocumentSnapshot successfully written!", Toast.LENGTH_LONG).show() }
 //            .addOnFailureListener { e -> println(e) }
 
-        val exerciseDataFromMobile: HashMap<String, Any> = hashMapOf()
-        val map: HashMap<Any, Any> = hashMapOf("capital" to true)
+        if (activitiesInRealm.size == 0) {
+            Toast.makeText(this,"Everything is up to date", Toast.LENGTH_SHORT).show()
+            return
+        }
         for (activityInRealm in activitiesInRealm) {
-            var exerciseDataForCloud = ExerciseData(activityInRealm.activity,
-                                                    activityInRealm.exerciseType,
-                                                    activityInRealm._id.toString(),
-                                                    activityInRealm.sets,
-                                                    activityInRealm.reps,
-                                                    activityInRealm.weights,
-                                                    activityInRealm.date,
-                                                    activityInRealm.dateDate,
-                                                    activityInRealm.notes)
-            db.collection("ExerciseData").document("user_name_"+activityInRealm._id.toString())
-                .set(exerciseDataForCloud, SetOptions.merge())
-                .addOnSuccessListener { Toast.makeText(this,"Data Transferring, Please Wait", Toast.LENGTH_SHORT).show() }
-                .addOnFailureListener { e -> println(e) }
+            if (!activityInRealm.savedInCloud) {
+                //Maybe update the "actitiviesInRealm" to just activities with savedInCloud = false
+                var exerciseDataForCloud = ExerciseData(activityInRealm.activity,
+                    activityInRealm.exerciseType,
+                    activityInRealm._id.toString(),
+                    activityInRealm.sets,
+                    activityInRealm.reps,
+                    activityInRealm.weights,
+                    activityInRealm.date,
+                    activityInRealm.dateDate,
+                    activityInRealm.notes)
+                db.collection("ExerciseData").document("user_name_"+activityInRealm._id.toString())
+                    .set(exerciseDataForCloud, SetOptions.merge())
+                    .addOnSuccessListener {
+                        Toast.makeText(this,"Data Transferring, Please Wait", Toast.LENGTH_SHORT).show()
+                        upsertObjectInRealm(ExerciseModel(activityInRealm.activity,
+                                                          activityInRealm.exerciseType,
+                                                          activityInRealm._id,
+                                                          activityInRealm.sets,
+                                                          activityInRealm.reps,
+                                                          activityInRealm.weights,
+                                                          activityInRealm.date,
+                                                          activityInRealm.dateDate,
+                                                          activityInRealm.notes,
+                                                          true)
+                        )
+                    }
+                    .addOnFailureListener { e -> println(e) }
+            }
         }
     }
 }

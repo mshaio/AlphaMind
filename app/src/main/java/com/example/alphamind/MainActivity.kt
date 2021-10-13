@@ -340,7 +340,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun displayDashboard() {
-        println("2222222")
         val intent = Intent(this, dashboard::class.java)
         startActivity(intent)
     }
@@ -361,6 +360,7 @@ class MainActivity : AppCompatActivity() {
     private fun saveDataToCloud() {
         val activitiesInRealm = queryObjectInRealmRequiresCloudUpdate() //queryObjectInRealm()
         val db = FirebaseFirestore.getInstance()
+        val uid = Authentication().getUserId()
 
         data class ExerciseData(
             var activity: String = "",
@@ -374,6 +374,10 @@ class MainActivity : AppCompatActivity() {
             var notes: String? = null
         )
 
+        if (!Authentication().isSignedIn()) {
+            Toast.makeText(this,"Please Sign in with Google to sync",Toast.LENGTH_SHORT).show()
+            return
+        }
 //        val city = hashMapOf(
 //            "name" to "Los Angeles",
 //            "state" to "CA",
@@ -388,9 +392,9 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this,"Everything is up to date", Toast.LENGTH_SHORT).show()
             return
         }
+
         for (activityInRealm in activitiesInRealm) {
             if (!activityInRealm.savedInCloud) {
-                //Maybe update the "actitiviesInRealm" to just activities with savedInCloud = false
                 var exerciseDataForCloud = ExerciseData(activityInRealm.activity,
                     activityInRealm.exerciseType,
                     activityInRealm._id.toString(),
@@ -400,7 +404,7 @@ class MainActivity : AppCompatActivity() {
                     activityInRealm.date,
                     activityInRealm.dateDate,
                     activityInRealm.notes)
-                db.collection("ExerciseData").document("user_name_"+activityInRealm._id.toString())
+                db.collection("ExerciseData").document(uid+"_"+activityInRealm._id.toString())
                     .set(exerciseDataForCloud, SetOptions.merge())
                     .addOnSuccessListener {
                         Toast.makeText(this,"Data Transferring, Please Wait", Toast.LENGTH_SHORT).show()

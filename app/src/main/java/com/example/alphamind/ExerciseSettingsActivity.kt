@@ -217,6 +217,7 @@ class ExerciseSettingsActivity : AppCompatActivity() {
         val todaysExercise = intent.getStringExtra("exercise")
         var dateDate = intent.getStringExtra("dateDate")
         var realDate: Date = stringToDate(dateDate)
+        val SAVING_TO_CLOUD_REQUIRED = true
 
         if (validateInput(exerciseTextView.text.toString(),false)) {
             Toast.makeText(applicationContext,"Invalid exercise",Toast.LENGTH_SHORT).show()
@@ -244,7 +245,7 @@ class ExerciseSettingsActivity : AppCompatActivity() {
                 upsertObjectInRealm(ExerciseModel(exerciseTextView.text.toString(), todaysExercise, ObjectId(), setTextView.text.toString().toInt(),
                     repTextView.text.toString().toInt(),
                     weightTextView.text.toString().toInt(),
-                    date,realDate,noteInputEditText.text.toString()))
+                    date,realDate,noteInputEditText.text.toString(),SAVING_TO_CLOUD_REQUIRED))
                 totalVolumeTextView.setText(getTotalVolume(date))
                 Toast.makeText(applicationContext,"Added exercise",Toast.LENGTH_SHORT).show()
             } else {
@@ -260,7 +261,7 @@ class ExerciseSettingsActivity : AppCompatActivity() {
                         upsertObjectInRealm(ExerciseModel(exerciseTextView.text.toString(), todaysExercise, ObjectId(), setTextView.text.toString().toInt(),
                             repTextView.text.toString().toInt(),
                             weightTextView.text.toString().toInt(),
-                            date,realDate,noteInputEditText.text.toString()))
+                            date,realDate,noteInputEditText.text.toString(),SAVING_TO_CLOUD_REQUIRED))
                         totalVolumeTextView.setText(getTotalVolume(date))
                         Toast.makeText(applicationContext,"Updated exercise log",Toast.LENGTH_SHORT).show()
                     }

@@ -23,6 +23,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:visibility="visible"
+        app:colorScheme="dark"
+        app:buttonSize="wide"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

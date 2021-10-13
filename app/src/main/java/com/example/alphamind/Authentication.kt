@@ -1,26 +1,19 @@
 package com.example.alphamind
 
-import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.alphamind.databinding.ActivityAuthenticationBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.SignInButton
 import com.google.android.gms.common.api.ApiException
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 
 class Authentication : AppCompatActivity() {
 
@@ -35,6 +28,8 @@ class Authentication : AppCompatActivity() {
     lateinit var signInClient: GoogleSignInClient
     lateinit var signInOptions: GoogleSignInOptions
 
+    lateinit var userHandle: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -43,21 +38,18 @@ class Authentication : AppCompatActivity() {
 
         setSupportActionBar(binding.toolbar)
 
-        println("ONCREATE")
-        println("GSO")
         auth = FirebaseAuth.getInstance()
-
+        
         val googleSignInButton: SignInButton = findViewById(R.id.sign_in_button)
         googleSignInButton.setOnClickListener {
-            println("Clicked Sign In")
             signIn()
         }
         setupGoogleLogin()
 
-        binding.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
+//        binding.fab.setOnClickListener { view ->
+//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                .setAction("Action", null).show()
+//        }
     }
 
     private fun setupGoogleLogin() {
@@ -82,8 +74,9 @@ class Authentication : AppCompatActivity() {
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 val account = task.getResult(ApiException::class.java)!!
-                Log.d(TAG, "firebaseAuthWithGoogle:" + account.id)
-                Toast.makeText(this, "FirebaseAuthWithGoogle" + account.id, Toast.LENGTH_LONG).show()
+//                Log.d(TAG, "firebaseAuthWithGoogle:" + account.id)
+                userHandle = account.displayName
+                Toast.makeText(this, "FirebaseAuthWithGoogle" + account.displayName, Toast.LENGTH_LONG).show()
                 firebaseAuthWithGoogle(account.idToken!!)
             } catch (e: ApiException) {
                 // Google Sign In failed, update UI appropriately
@@ -126,6 +119,15 @@ class Authentication : AppCompatActivity() {
 //                    updateUI(null)
                 }
             }
+    }
+
+    fun isSignedIn(): Boolean {
+        return FirebaseAuth.getInstance().currentUser != null
+    }
+
+    fun getUserId (): String {
+//        println(FirebaseAuth.getInstance().currentUser!!.displayName)
+        return FirebaseAuth.getInstance().currentUser!!.uid.toString()
     }
 
 }

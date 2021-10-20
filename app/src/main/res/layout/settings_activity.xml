@@ -36,10 +36,10 @@
         android:hint="@string/exercise_type">
 
     <AutoCompleteTextView
-            android:id="@+id/exercise_list"
-            android:layout_margin="2dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+        android:id="@+id/exercise_list"
+        android:layout_margin="2dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -123,7 +123,7 @@
             android:layout_margin="2dp"
             android:gravity="top|start"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="370dp"
             android:inputType="textMultiLine"
             android:clickable="false"
             />
@@ -144,6 +144,7 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:inputType="textMultiLine"
+            android:enabled="false"
             />
 
     </com.google.android.material.textfield.TextInputLayout>

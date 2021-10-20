@@ -114,20 +114,7 @@ class ExerciseSettingsActivity : AppCompatActivity() {
                 else -> false
             }
         }
-        val armsFilter = topAppBar.menu.findItem(R.id.arms_filter)
-        val backFilter = topAppBar.menu.findItem(R.id.back_filter)
-        val chestFilter= topAppBar.menu.findItem(R.id.chest_filter)
-        val legsFilter = topAppBar.menu.findItem(R.id.legs_filter)
-        val pullfilter = topAppBar.menu.findItem(R.id.pull_filter)
-        val pushFilter = topAppBar.menu.findItem(R.id.push_filter)
-        val noFilter = topAppBar.menu.findItem(R.id.all)
-        armsFilter.isVisible = false
-        backFilter.isVisible = false
-        chestFilter.isVisible = false
-        legsFilter.isVisible = false
-        pullfilter.isVisible = false
-        pushFilter.isVisible = false
-        noFilter.isVisible = false
+        AppBarUtils(topAppBar).setUpAppBarWithoutFilter()
     }
     private fun stringToDate(date: String): Date {
         val formatter = SimpleDateFormat("yyyy-MM-dd")

@@ -38,18 +38,24 @@ class Authentication : AppCompatActivity() {
 
         setSupportActionBar(binding.toolbar)
 
-        auth = FirebaseAuth.getInstance()
-        
-        val googleSignInButton: SignInButton = findViewById(R.id.sign_in_button)
-        googleSignInButton.setOnClickListener {
-            signIn()
-        }
-        setupGoogleLogin()
+        if (isSignedIn()) {
+            println("SINGED OUT")
+            signInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build()
+            signInClient = GoogleSignIn.getClient(this, signInOptions)
+            signOut()
+        } else {
+            println("SIGNED IN")
+            auth = FirebaseAuth.getInstance()
 
-//        binding.fab.setOnClickListener { view ->
-//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                .setAction("Action", null).show()
-//        }
+            val googleSignInButton: SignInButton = findViewById(R.id.sign_in_button)
+            googleSignInButton.setOnClickListener {
+                signIn()
+            }
+            setupGoogleLogin()
+        }
     }
 
     private fun setupGoogleLogin() {
@@ -63,6 +69,11 @@ class Authentication : AppCompatActivity() {
     private fun signIn() {
         val signInIntent = signInClient.signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN)
+    }
+
+    private fun signOut() {
+        signInClient.signOut()
+        FirebaseAuth.getInstance().signOut()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -98,7 +109,7 @@ class Authentication : AppCompatActivity() {
         super.onStart()
         val user = FirebaseAuth.getInstance().currentUser
         if (user != null) {
-            println("LOGGED  IN")
+            println("LOGGED IN")
 //            startActivity(LoggedInActivity.getLaunchIntent(this))
             finish()
         }
@@ -127,7 +138,10 @@ class Authentication : AppCompatActivity() {
 
     fun getUserId (): String {
 //        println(FirebaseAuth.getInstance().currentUser!!.displayName)
-        return FirebaseAuth.getInstance().currentUser!!.uid.toString()
+        if (FirebaseAuth.getInstance().currentUser != null) {
+            return FirebaseAuth.getInstance().currentUser!!.uid.toString()
+        }
+        return ""
     }
 
 }

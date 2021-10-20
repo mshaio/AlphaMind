@@ -81,7 +81,7 @@ class MainActivity : AppCompatActivity() {
         lateinit var topAppBar: MaterialToolbar
         topAppBar = findViewById<MaterialToolbar>(R.id.topAppBar)
         val menuItem = topAppBar.menu.findItem(R.id.save_log)
-        menuItem.setVisible(false)
+        menuItem.isVisible = false
 
         topAppBar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
@@ -172,7 +172,7 @@ class MainActivity : AppCompatActivity() {
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
             val singleItems = arrayOf("Arms","Back","Chest","Legs","Pull","Push")
-            val checkedItem = 1
+            val checkedItem = 0
             var selectedExercise: String = ' '.toString()
 
             MaterialAlertDialogBuilder(this)
@@ -374,7 +374,7 @@ class MainActivity : AppCompatActivity() {
             var notes: String? = null
         )
 
-        if (!Authentication().isSignedIn()) {
+        if (!Authentication().isSignedIn() && uid.length <= 0) {
             Toast.makeText(this,"Please Sign in with Google to sync",Toast.LENGTH_SHORT).show()
             return
         }

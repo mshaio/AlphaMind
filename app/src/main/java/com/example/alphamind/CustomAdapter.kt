@@ -36,6 +36,9 @@ internal class CustomAdapter(private var mContext: Context, private var itemsLis
                 println("LKJHGFDS")
                 println(stringToDate(dateFormatter((exerciseDate))))
 //                mContext.startActivity(Intent(mContext, ExerciseSettingsActivity::class.java))
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    itemView.setBackgroundColor(Color.rgb(166,166,166))
+                }
 
                 var intent = Intent(mContext, ExerciseSettingsActivity::class.java)
                 intent.putExtra("date", exerciseDate)

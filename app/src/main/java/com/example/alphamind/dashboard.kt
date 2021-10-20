@@ -1,5 +1,6 @@
 package com.example.alphamind
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -63,6 +64,18 @@ class dashboard : AppCompatActivity() {
 
         var topAppBar: MaterialToolbar = findViewById(R.id.topAppBar)
         AppBarUtils(topAppBar).setUpDefaultAppBar()
+
+        val menuItem = topAppBar.menu.findItem(R.id.save_log)
+        menuItem.isVisible = false
+        topAppBar.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.calendar_view -> {
+                    displayCalenderView()
+                    true
+                }
+                else -> false
+            }
+        }
 
         var radarChart: RadarChart = findViewById(R.id.radar_chart)
         var radarChart2: RadarChart = findViewById(R.id.radar_chart2)
@@ -343,6 +356,11 @@ class dashboard : AppCompatActivity() {
         }
         return daysExercisedThisMonth.size.toString()
 
+    }
+
+    private fun displayCalenderView() {
+        val intent = Intent(this, CalenderView::class.java)
+        startActivity(intent)
     }
 
     override fun onSupportNavigateUp(): Boolean {

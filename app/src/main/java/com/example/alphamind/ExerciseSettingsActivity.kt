@@ -107,6 +107,10 @@ class ExerciseSettingsActivity : AppCompatActivity() {
                     deleteAllObjectsInRealm()
                     true
                 }
+                R.id.calendar_view -> {
+                    displayCalenderView()
+                    true
+                }
                 R.id.charts -> {
                     gotoCharts(selectedDate, dateDate)
                     true
@@ -217,7 +221,7 @@ class ExerciseSettingsActivity : AppCompatActivity() {
         val todaysExercise = intent.getStringExtra("exercise")
         var dateDate = intent.getStringExtra("dateDate")
         var realDate: Date = stringToDate(dateDate)
-        val SAVING_TO_CLOUD_REQUIRED = true
+        val SAVED_IN_CLOUD = false
 
         if (validateInput(exerciseTextView.text.toString(),false)) {
             Toast.makeText(applicationContext,"Invalid exercise",Toast.LENGTH_SHORT).show()
@@ -245,7 +249,7 @@ class ExerciseSettingsActivity : AppCompatActivity() {
                 upsertObjectInRealm(ExerciseModel(exerciseTextView.text.toString(), todaysExercise, ObjectId(), setTextView.text.toString().toInt(),
                     repTextView.text.toString().toInt(),
                     weightTextView.text.toString().toInt(),
-                    date,realDate,noteInputEditText.text.toString(),SAVING_TO_CLOUD_REQUIRED))
+                    date,realDate,noteInputEditText.text.toString(),SAVED_IN_CLOUD))
                 totalVolumeTextView.setText(getTotalVolume(date))
                 Toast.makeText(applicationContext,"Added exercise",Toast.LENGTH_SHORT).show()
             } else {
@@ -261,7 +265,7 @@ class ExerciseSettingsActivity : AppCompatActivity() {
                         upsertObjectInRealm(ExerciseModel(exerciseTextView.text.toString(), todaysExercise, ObjectId(), setTextView.text.toString().toInt(),
                             repTextView.text.toString().toInt(),
                             weightTextView.text.toString().toInt(),
-                            date,realDate,noteInputEditText.text.toString(),SAVING_TO_CLOUD_REQUIRED))
+                            date,realDate,noteInputEditText.text.toString(),SAVED_IN_CLOUD))
                         totalVolumeTextView.setText(getTotalVolume(date))
                         Toast.makeText(applicationContext,"Updated exercise log",Toast.LENGTH_SHORT).show()
                     }
@@ -400,6 +404,11 @@ class ExerciseSettingsActivity : AppCompatActivity() {
         intent.putExtra("date",date)
         intent.putExtra("dateDate", dateDate)
         intent.putExtra("totalVolume", getTotalVolume(date))
+        startActivity(intent)
+    }
+
+    private fun displayCalenderView() {
+        val intent = Intent(this, CalenderView::class.java)
         startActivity(intent)
     }
 }

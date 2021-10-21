@@ -83,6 +83,8 @@ class MainActivity : AppCompatActivity() {
         val menuItem = topAppBar.menu.findItem(R.id.save_log)
         menuItem.isVisible = false
 
+        checkSignInStatus(topAppBar)
+
         topAppBar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.save_log -> {
@@ -236,7 +238,8 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         prepareItems()
-    }
+        checkSignInStatus(findViewById<MaterialToolbar>(R.id.topAppBar))
+}
 
     private fun prepareItems(exerciseType: String? = "") {
         itemsList.clear()
@@ -252,6 +255,14 @@ class MainActivity : AppCompatActivity() {
             }
         }
         customAdapter.notifyDataSetChanged()
+    }
+
+    private fun checkSignInStatus(topAppBar: MaterialToolbar) {
+        if (Authentication().isSignedIn()) {
+            topAppBar.menu.findItem(R.id.action_settings).title = "Logout"
+        } else {
+            topAppBar.menu.findItem(R.id.action_settings).title = "Login"
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

@@ -137,7 +137,6 @@ class Authentication : AppCompatActivity() {
     }
 
     fun getUserId (): String {
-//        println(FirebaseAuth.getInstance().currentUser!!.displayName)
         if (FirebaseAuth.getInstance().currentUser != null) {
             return FirebaseAuth.getInstance().currentUser!!.uid.toString()
         }

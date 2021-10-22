@@ -46,7 +46,8 @@ class CalenderView : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        window.statusBarColor = ContextCompat.getColor(this, R.color.autumn_dark_1)
+        window.statusBarColor = ContextCompat.getColor(this, R.color.brown_300)
+        window.decorView.setBackgroundColor(resources.getColor(R.color.brown_300))
 
         val currentMonth = YearMonth.now()
         val firstMonth = currentMonth.minusMonths(2)

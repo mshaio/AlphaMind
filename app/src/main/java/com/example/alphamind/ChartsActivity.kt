@@ -54,7 +54,8 @@ class ChartsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_charts)
-        window.statusBarColor = ContextCompat.getColor(this, R.color.autumn_dark_1)
+        window.statusBarColor = ContextCompat.getColor(this, R.color.brown_300)
+        window.decorView.setBackgroundColor(resources.getColor(R.color.brown_300))
 
         var topAppBar: MaterialToolbar = findViewById(R.id.topAppBar)
         AppBarUtils(topAppBar).setUpDefaultAppBar()
@@ -163,7 +164,7 @@ class ChartsActivity : AppCompatActivity() {
             chip_one.text = "%.2f".format((exerciseVolume[0]/totalVolume * 100)).toString() + " %"
             activityTextViewOne.text = sortedExerciseName[0]
             chip_one.isVisible = true
-            chip_one.setChipBackgroundColorResource(R.color.teal_200)
+            chip_one.setChipBackgroundColorResource(R.color.sun_set_1)
         }
         if (exerciseVolume.size >= 2) {
 //            chart_two.progress = (exerciseVolume[1]/totalVolume * 100).toInt()
@@ -171,7 +172,7 @@ class ChartsActivity : AppCompatActivity() {
             chip_two.text = "%.2f".format((exerciseVolume[1]/totalVolume * 100)).toString() + " %"
             activityTextViewTwo.text = sortedExerciseName[1]
             chip_two.isVisible = true
-            chip_two.setChipBackgroundColorResource(R.color.autumn_light)
+            chip_two.setChipBackgroundColorResource(R.color.sun_set_2)
         }
         if (exerciseVolume.size >= 3) {
 //            chart_three.progress = (exerciseVolume[2]/totalVolume * 100).toInt()
@@ -179,7 +180,7 @@ class ChartsActivity : AppCompatActivity() {
             chip_three.text = "%.2f".format((exerciseVolume[2]/totalVolume * 100)).toString() + " %"
             activityTextViewThree.text = sortedExerciseName[2]
             chip_three.isVisible = true
-            chip_three.setChipBackgroundColorResource(R.color.autumn_dark)
+            chip_three.setChipBackgroundColorResource(R.color.sun_set_3)
         }
         if (exerciseVolume.size >= 4) {
 //            chart_four.progress = (exerciseVolume[3]/totalVolume * 100).toInt()
@@ -187,7 +188,7 @@ class ChartsActivity : AppCompatActivity() {
             chip_four.text = "%.2f".format((exerciseVolume[3]/totalVolume * 100)).toString() + " %"
             activityTextViewFour.text = sortedExerciseName[3]
             chip_four.isVisible = true
-            chip_four.setChipBackgroundColorResource(R.color.autumn_dark_1)
+            chip_four.setChipBackgroundColorResource(R.color.sun_set_4)
         }
         if (exerciseVolume.size >= 5) {
 //            chart_five.progress = (exerciseVolume[5]/totalVolume * 100).toInt()
@@ -195,7 +196,7 @@ class ChartsActivity : AppCompatActivity() {
             chip_five.text = "%.2f".format((exerciseVolume[4]/totalVolume * 100)).toString() + " %"
             activityTextViewFive.text = sortedExerciseName[4]
             chip_five.isVisible = true
-            chip_five.setChipBackgroundColorResource(R.color.teal_700)
+            chip_five.setChipBackgroundColorResource(R.color.sun_set_5)
         }
 
         println(getTodaysBests(exerciseDate))
@@ -239,7 +240,15 @@ class ChartsActivity : AppCompatActivity() {
             }
 
             val barDataSet = BarDataSet(entries, "")
-            barDataSet.setColors(*ColorTemplate.COLORFUL_COLORS)
+//            barDataSet.setColors(*ColorTemplate.COLORFUL_COLORS)
+
+            var colorTestList: MutableList<Int> = mutableListOf()
+            colorTestList.add(resources.getColor(R.color.sun_set_1))
+            colorTestList.add(resources.getColor(R.color.sun_set_2))
+            colorTestList.add(resources.getColor(R.color.sun_set_3))
+            colorTestList.add(resources.getColor(R.color.sun_set_4))
+            colorTestList.add(resources.getColor(R.color.sun_set_5))
+            barDataSet.setColors(colorTestList)
 
             val data = BarData(barDataSet)
             val barChart = findViewById<BarChart>(R.id.barChart)

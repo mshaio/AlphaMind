@@ -28,7 +28,8 @@ class ExerciseSettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.settings_activity)
-        window.statusBarColor = ContextCompat.getColor(this, R.color.autumn_dark_1)
+        window.statusBarColor = ContextCompat.getColor(this, R.color.brown_300)
+        window.decorView.setBackgroundColor(resources.getColor(R.color.brown_300))
 
         var selectedDate: String = ""
         var realDate: Date = stringToDate(intent.getStringExtra("dateDate"))

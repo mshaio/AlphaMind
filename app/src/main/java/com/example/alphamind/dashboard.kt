@@ -59,8 +59,10 @@ class dashboard : AppCompatActivity() {
 
         setContentView(R.layout.activity_dashboard)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.statusBarColor = ContextCompat.getColor(this, R.color.autumn_dark_1)
+            window.statusBarColor = ContextCompat.getColor(this, R.color.brown_300)
         }
+        window.decorView.setBackgroundColor(resources.getColor(R.color.brown_300))
+
 
         var topAppBar: MaterialToolbar = findViewById(R.id.topAppBar)
         AppBarUtils(topAppBar).setUpDefaultAppBar()

@@ -7,11 +7,13 @@ import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.example.alphamind.R.color.brown_200
 import com.google.android.material.switchmaterial.SwitchMaterial
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -25,6 +27,7 @@ internal class CustomAdapter(private var mContext: Context, private var itemsLis
         var dateTextView: TextView = view.findViewById(R.id.date)
         var selectedItem: SwitchMaterial = view.findViewById(R.id.unique_item)
         var itemLayout: LinearLayout = view.findViewById(R.id.item)
+        var exerciseIconImageView: ImageView = view.findViewById(R.id.exercise_icon)
 
         init {
             itemView.setOnClickListener { v: View ->
@@ -37,7 +40,7 @@ internal class CustomAdapter(private var mContext: Context, private var itemsLis
                 println(stringToDate(dateFormatter((exerciseDate))))
 //                mContext.startActivity(Intent(mContext, ExerciseSettingsActivity::class.java))
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    itemView.setBackgroundColor(Color.rgb(166,166,166))
+//                    itemView.setBackgroundColor(Color.rgb(166,166,166))
                 }
 
                 var intent = Intent(mContext, ExerciseSettingsActivity::class.java)
@@ -97,10 +100,17 @@ internal class CustomAdapter(private var mContext: Context, private var itemsLis
 //            "Back" -> holder.itemTextView.setTextColor(Color.rgb(248,177,149))
 //            "Chest" -> holder.itemTextView.setTextColor(Color.rgb(192,108,132))
 //            "Legs" -> holder.itemTextView.setTextColor(Color.rgb(53,92,125))
-            "Arms" -> holder.itemLayout.setBackgroundColor(Color.rgb(246,114,128))
-            "Back" -> holder.itemLayout.setBackgroundColor(Color.rgb(248,177,149))
-            "Chest" -> holder.itemLayout.setBackgroundColor(Color.rgb(192,108,132))
-            "Legs" -> holder.itemLayout.setBackgroundColor(Color.rgb(53,92,125))
+//            "Arms" -> holder.itemLayout.setBackgroundColor(Color.rgb(246,114,128))
+
+//            "Back" -> holder.exerciseIconImageView.setBackgroundColor(Color.rgb(248,177,149))
+//            "Chest" -> holder.exerciseIconImageView.setBackgroundColor(Color.rgb(192,108,132))
+//            "Legs" -> holder.exerciseIconImageView.setBackgroundColor(Color.rgb(53,92,125))
+//            "Arms" -> holder.exerciseIconImageView.setBackgroundColor(Color.rgb(246,114,128))
+
+            "Arms" -> holder.exerciseIconImageView.setImageResource(R.drawable.ic_baseline_fitness_center_24_sunset2)
+            "Back" -> holder.exerciseIconImageView.setImageResource(R.drawable.ic_baseline_fitness_center_24_sunset1)
+            "Chest" -> holder.exerciseIconImageView.setImageResource(R.drawable.ic_baseline_fitness_center_24_sunset3)
+            "Legs" -> holder.exerciseIconImageView.setImageResource(R.drawable.ic_baseline_fitness_center_24_sunset5)
         }
 
     }

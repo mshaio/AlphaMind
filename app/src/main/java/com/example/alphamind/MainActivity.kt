@@ -73,7 +73,8 @@ class MainActivity : AppCompatActivity() {
         println(queryObjectInRealm())
         println("***")
 
-        window.statusBarColor = ContextCompat.getColor(this, R.color.autumn_dark_1)
+        window.statusBarColor = ContextCompat.getColor(this, R.color.brown_300)
+        window.decorView.setBackgroundColor(resources.getColor(R.color.brown_300))
         val exerciseChoice: FloatingActionButton = findViewById(R.id.execrise_choice)
         val calendar: FloatingActionButton = findViewById(R.id.caledar)
 //        val search: SearchView = findViewById<SearchView>(R.id.searchView)

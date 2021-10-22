@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:background="@color/autumn_dark_1"
+        android:background="@color/brown_300"
         android:text="SUN"
         android:textColor="@color/white"
         android:textSize="14sp" />
@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:background="@color/autumn_dark_1"
+        android:background="@color/brown_300"
         android:text="MON"
         android:textColor="@color/white"
         android:textSize="14sp" />
@@ -35,7 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:background="@color/autumn_dark_1"
+        android:background="@color/brown_300"
         android:text="TUE"
         android:textColor="@color/white"
         android:textSize="14sp" />
@@ -46,7 +46,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:background="@color/autumn_dark_1"
+        android:background="@color/brown_300"
         android:text="WED"
         android:textColor="@color/white"
         android:textSize="14sp" />
@@ -57,7 +57,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:background="@color/autumn_dark_1"
+        android:background="@color/brown_300"
         android:text="THU"
         android:textColor="@color/white"
         android:textSize="14sp" />
@@ -68,7 +68,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:background="@color/autumn_dark_1"
+        android:background="@color/brown_300"
         android:text="FRI"
         android:textColor="@color/white"
         android:textSize="14sp" />
@@ -79,7 +79,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:background="@color/autumn_dark_1"
+        android:background="@color/brown_300"
         android:text="SAT"
         android:textColor="@color/white"
         android:textSize="14sp" />

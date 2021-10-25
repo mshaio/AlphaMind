@@ -174,7 +174,7 @@ class MainActivity : AppCompatActivity() {
         exerciseChoice.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
-            val singleItems = arrayOf("Arms","Back","Chest","Legs","Pull","Push")
+            val singleItems = arrayOf("Arms","Back","Chest","Legs","Pull","Push","Shoulders")
             val checkedItem = 0
             var selectedExercise: String = ' '.toString()
 

@@ -35,7 +35,7 @@
             android:orientation="horizontal">
 
             <com.google.android.material.card.MaterialCardView
-                app:cardBackgroundColor="@color/cardview_dark_background"
+                app:cardBackgroundColor="@color/brown_200"
                 android:clickable="true"
                 android:focusable="true"
                 android:layout_width="match_parent"
@@ -61,12 +61,12 @@
                     android:layout_centerInParent="true"
                     android:textSize="15sp"
                     android:gravity="bottom|center"
-                    android:textColor="@color/autumn_light"
+                    android:textColor="@color/brown_400"
                     android:text="Sets All Time"/>
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                app:cardBackgroundColor="@color/cardview_dark_background"
+                app:cardBackgroundColor="@color/brown_200"
                 android:clickable="true"
                 android:focusable="true"
                 android:layout_width="match_parent"
@@ -92,13 +92,13 @@
                     android:layout_centerInParent="true"
                     android:textSize="15sp"
                     android:gravity="bottom|center"
-                    android:textColor="@color/autumn_light"
+                    android:textColor="@color/brown_400"
                     android:text="Sets Current vs Previous Month"/>
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
 
         <com.google.android.material.card.MaterialCardView
-            app:cardBackgroundColor="@color/cardview_dark_background"
+            app:cardBackgroundColor="@color/brown_200"
             android:clickable="true"
             android:focusable="true"
             android:layout_width="match_parent"
@@ -113,7 +113,7 @@
                 android:layout_centerInParent="true"
                 android:textSize="15sp"
                 android:gravity="top|center"
-                android:textColor="@color/teal_200"
+                android:textColor="@color/brown_400"
                 android:text="Max Weight Lifted By Exercises"/>
 
             <com.github.mikephil.charting.charts.LineChart
@@ -124,6 +124,7 @@
                 android:layout_marginRight="4dp"
                 android:layout_marginTop="4dp"
                 android:layout_marginBottom="4dp"
+                android:outlineAmbientShadowColor="@color/sun_set_5"
                 android:elevation="10dp"
                 />
 
@@ -135,7 +136,7 @@
             android:orientation="horizontal">
 
             <com.google.android.material.card.MaterialCardView
-                app:cardBackgroundColor="@color/cardview_dark_background"
+                app:cardBackgroundColor="@color/brown_200"
                 android:clickable="true"
                 android:focusable="true"
                 android:layout_width="match_parent"
@@ -150,7 +151,7 @@
                     android:layout_centerInParent="true"
                     android:textSize="25sp"
                     android:gravity="top|top|center"
-                    android:textColor="@color/sun_set_1"
+                    android:textColor="@color/sun_set_3"
                     android:text="Days Exercised"/>
 
                 <TextView
@@ -160,7 +161,7 @@
                     android:layout_centerInParent="true"
                     android:textSize="70sp"
                     android:gravity="center"
-                    android:textColor="@color/sun_set_1"
+                    android:textColor="@color/sun_set_3"
                     android:text="33"/>
 
                 <TextView
@@ -169,12 +170,12 @@
                     android:layout_centerInParent="true"
                     android:textSize="25sp"
                     android:gravity="bottom|center"
-                    android:textColor="@color/sun_set_1"
+                    android:textColor="@color/sun_set_3"
                     android:text="Total"/>
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                app:cardBackgroundColor="@color/cardview_dark_background"
+                app:cardBackgroundColor="@color/brown_200"
                 android:clickable="true"
                 android:focusable="true"
                 android:layout_width="match_parent"
@@ -213,7 +214,7 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                app:cardBackgroundColor="@color/cardview_dark_background"
+                app:cardBackgroundColor="@color/brown_200"
                 android:clickable="true"
                 android:focusable="true"
                 android:layout_width="match_parent"
@@ -228,7 +229,7 @@
                     android:layout_centerInParent="true"
                     android:textSize="25sp"
                     android:gravity="top|top|center"
-                    android:textColor="@color/purple_200"
+                    android:textColor="@color/sun_set_4"
                     android:text="Days Exercised"/>
 
                 <TextView
@@ -238,7 +239,7 @@
                     android:layout_centerInParent="true"
                     android:textSize="70sp"
                     android:gravity="center"
-                    android:textColor="@color/purple_200"
+                    android:textColor="@color/sun_set_4"
                     android:text="2"/>
 
                 <TextView
@@ -247,7 +248,7 @@
                     android:layout_centerInParent="true"
                     android:textSize="25sp"
                     android:gravity="bottom|center"
-                    android:textColor="@color/purple_200"
+                    android:textColor="@color/sun_set_4"
                     android:text="Last Month"/>
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>

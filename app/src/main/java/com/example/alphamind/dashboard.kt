@@ -142,35 +142,41 @@ class dashboard : AppCompatActivity() {
         lateinit var lineData: LineData
         lateinit var lineDataSet: LineDataSet
         var lineEntries: ArrayList<Entry> = ArrayList<Entry>()
-        val exercises = listOf(
+        var exercises = mutableListOf(
             "Bicep Curls",
             "Cables Bicep Curls",
-            "Cables (down)",
-            "Cables (up)",
+            "Cables Fly",
             "Dead Lift",
             "Decline Bench Press",
             "Dumbbell Row",
             "Flat Bench Press",
+            "Front Raise",
             "Incline Bench Press",
             "Lat Pressdown",
             "Lat Pulldown",
+            "Lateral Raise",
             "Leg Curls",
             "Leg Extension",
             "Leg Press",
+            "Overhead Press",
             "Pec Deck",
-            "Pull-up",
+            "Pull up",
+            "Rear Delt Fly",
             "Row",
-            "Tricep Extension (Cable)",
-            "Tricep Extension (Dumbbell)",
+            "Tricep Extension Cable",
+            "Tricep Extension Dumbbell",
             "Tricep Pushdown",
             "Seated Cable Row",
+            "Shoulder Press",
             "Shrugs",
             "Squats",
         )
 
         for (exerciseIndex in 0..exercises.size-1) {
             //lineEntries.add(Entry(0F,1F))
-            lineEntries.add(Entry(exerciseIndex.toFloat(),queryMaxObjectInRealm("activity",exercises[exerciseIndex]).toFloat()))
+            var maxWeight = queryMaxObjectInRealm("activity",exercises[exerciseIndex]).toFloat()
+            lineEntries.add(Entry(exerciseIndex.toFloat(),maxWeight))
+            exercises[exerciseIndex] = exercises[exerciseIndex] + "\n" + maxWeight.toInt().toString()
         }
 
         lineDataSet = LineDataSet(lineEntries,"")
@@ -180,9 +186,11 @@ class dashboard : AppCompatActivity() {
         cubicChart.setBackgroundColor(Color.TRANSPARENT)
         cubicChart.description.text = " "
 
-        lineDataSet.setColors(Color.rgb(53,92,125));
-        lineDataSet.setValueTextColor(Color.CYAN)
-        lineDataSet.valueTextSize = 14f
+        lineDataSet.setColors(resources.getColor(R.color.sun_set_3));
+        lineDataSet.setValueTextColor(resources.getColor(R.color.white))
+        lineDataSet.fillColor = resources.getColor(R.color.sun_set_3)
+        lineDataSet.setCircleColor(resources.getColor(R.color.sun_set_3))
+        lineDataSet.valueTextSize = 0f
         lineDataSet.setDrawFilled(true)
 //        lineDataSet.setDrawValues(false)
         lineDataSet.mode = LineDataSet.Mode.CUBIC_BEZIER
@@ -190,8 +198,13 @@ class dashboard : AppCompatActivity() {
         lineDataSet.setDrawVerticalHighlightIndicator(false)
 
         val marker = CustomMarkerView(this, R.layout.custom_marker_view, exercises)
-        cubicChart.marker = marker
+        cubicChart.marker = marker //when tap on line chart show the exercise"
         cubicChart.xAxis.setDrawLabels(false)
+
+        println("---")
+        println(lineDataSet.values)
+        println(lineDataSet.values::class.simpleName)
+        println("---")
     }
 
     private fun radarChart(radarChart: RadarChart, data: ArrayList<Int>, lastMonthsData: ArrayList<Int>) {
@@ -204,15 +217,16 @@ class dashboard : AppCompatActivity() {
             lastMonthsEntries.add(RadarEntry(i.toFloat()))
         }
         var radarDataSet = RadarDataSet(entries, " ")
-        radarDataSet.setColors(Color.rgb(248,177,149))
+//        radarDataSet.setColors(Color.rgb(248,177,149))
+        radarDataSet.setColors(resources.getColor(R.color.sun_set_2))
         radarDataSet.setLineWidth(2f)
-        radarDataSet.setValueTextColor(Color.rgb(248,177,149))
+        radarDataSet.setValueTextColor(resources.getColor(R.color.white))
         radarDataSet.setValueTextSize(0f)
 
         var radarDataSet2 = RadarDataSet(lastMonthsEntries," ")
-        radarDataSet2.setColors(Color.rgb(246,114,128))
+        radarDataSet2.setColors(resources.getColor(R.color.sun_set_4))
         radarDataSet2.setLineWidth(2f)
-        radarDataSet2.setValueTextColor(Color.rgb(246,114,128))
+        radarDataSet2.setValueTextColor(resources.getColor(R.color.white))
         radarDataSet2.setValueTextSize(0f)
 
         var radarData: RadarData = RadarData()
@@ -232,8 +246,8 @@ class dashboard : AppCompatActivity() {
         radarChart.scaleX = 1.2f
         radarChart.scaleY = 1.2f
         radarChart.setExtraOffsets(0F,20F,0F,0F)
-        radarChart.xAxis.textColor = Color.rgb(246,114,128)
-        radarChart.yAxis.textColor = Color.rgb(246,114,128)
+        radarChart.xAxis.textColor = resources.getColor(R.color.white)
+        radarChart.yAxis.textColor = resources.getColor(R.color.white)//Color.rgb(246,114,128)
 //        radarChart.legend.textColor = Color.rgb(246,114,128)
         radarChart.setData(radarData)
     }

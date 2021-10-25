@@ -51,19 +51,24 @@ class ExerciseSettingsActivity : AppCompatActivity() {
             "Decline Bench Press",
             "Dumbbell Row",
             "Flat Bench Press",
+            "Front Raise",
             "Incline Bench Press",
             "Lat Pressdown",
             "Lat Pulldown",
+            "Lateral Raise",
             "Leg Curls",
             "Leg Extension",
             "Leg Press",
+            "Overhead Press",
             "Pec Deck",
-            "Pull-up",
+            "Pull up",
+            "Rear Delt Fly",
             "Row",
             "Tricep Extension Cable",
             "Tricep Extension Dumbbell",
             "Tricep Pushdown",
             "Seated Cable Row",
+            "Shoulder Press",
             "Shrugs",
             "Squats",
         )
@@ -93,6 +98,11 @@ class ExerciseSettingsActivity : AppCompatActivity() {
         logView.setOnClickListener {
             confirmExerciseUpdate(realDate)
         }
+
+        findViewById<AutoCompleteTextView>(R.id.exercise_list).setDropDownBackgroundResource(R.color.brown_200)
+        findViewById<AutoCompleteTextView>(R.id.set_number).setDropDownBackgroundResource(R.color.brown_200)
+        findViewById<AutoCompleteTextView>(R.id.rep_number).setDropDownBackgroundResource(R.color.brown_200)
+        findViewById<AutoCompleteTextView>(R.id.weight).setDropDownBackgroundResource(R.color.brown_200)
 
         lateinit var topAppBar: MaterialToolbar
         topAppBar = findViewById<MaterialToolbar>(R.id.topAppBar)

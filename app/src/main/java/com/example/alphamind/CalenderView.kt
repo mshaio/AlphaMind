@@ -48,7 +48,7 @@ class CalenderView : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         window.statusBarColor = ContextCompat.getColor(this, R.color.brown_300)
         window.decorView.setBackgroundColor(resources.getColor(R.color.brown_300))
-
+        window.navigationBarColor = ContextCompat.getColor(this, R.color.brown_300)
         val currentMonth = YearMonth.now()
         val firstMonth = currentMonth.minusMonths(2)
         val lastMonth = currentMonth.plusMonths(2)

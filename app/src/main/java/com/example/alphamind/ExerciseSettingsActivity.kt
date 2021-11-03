@@ -30,7 +30,7 @@ class ExerciseSettingsActivity : AppCompatActivity() {
         setContentView(R.layout.settings_activity)
         window.statusBarColor = ContextCompat.getColor(this, R.color.brown_300)
         window.decorView.setBackgroundColor(resources.getColor(R.color.brown_300))
-
+        window.navigationBarColor = ContextCompat.getColor(this, R.color.brown_300)
         var selectedDate: String = ""
         var realDate: Date = stringToDate(intent.getStringExtra("dateDate"))
         var dateDate = intent.getStringExtra("dateDate")

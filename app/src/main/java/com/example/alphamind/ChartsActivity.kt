@@ -56,7 +56,7 @@ class ChartsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_charts)
         window.statusBarColor = ContextCompat.getColor(this, R.color.brown_300)
         window.decorView.setBackgroundColor(resources.getColor(R.color.brown_300))
-
+        window.navigationBarColor = ContextCompat.getColor(this, R.color.brown_300)
         var topAppBar: MaterialToolbar = findViewById(R.id.topAppBar)
         AppBarUtils(topAppBar).setUpDefaultAppBar()
 

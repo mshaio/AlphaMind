@@ -1,5 +1,6 @@
 package com.example.alphamind
 
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -7,10 +8,12 @@ import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.NonNull
+import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.alphamind.R.color.brown_200
@@ -40,7 +43,7 @@ internal class CustomAdapter(private var mContext: Context, private var itemsLis
                 println(stringToDate(dateFormatter((exerciseDate))))
 //                mContext.startActivity(Intent(mContext, ExerciseSettingsActivity::class.java))
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//                    itemView.setBackgroundColor(Color.rgb(166,166,166))
+                    itemLayout.setBackgroundColor(Color.rgb(166,166,166))
                 }
 
                 var intent = Intent(mContext, ExerciseSettingsActivity::class.java)
@@ -55,6 +58,7 @@ internal class CustomAdapter(private var mContext: Context, private var itemsLis
                 val position: Int = adapterPosition
                 selectionList[position] = selectedItem.isChecked
             }
+
         }
     }
 

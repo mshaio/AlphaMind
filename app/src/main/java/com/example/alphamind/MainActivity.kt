@@ -75,6 +75,7 @@ class MainActivity : AppCompatActivity() {
 
         window.statusBarColor = ContextCompat.getColor(this, R.color.brown_300)
         window.decorView.setBackgroundColor(resources.getColor(R.color.brown_300))
+        window.navigationBarColor = ContextCompat.getColor(this, R.color.brown_300)
         val exerciseChoice: FloatingActionButton = findViewById(R.id.execrise_choice)
         val calendar: FloatingActionButton = findViewById(R.id.caledar)
 //        val search: SearchView = findViewById<SearchView>(R.id.searchView)
@@ -163,18 +164,28 @@ class MainActivity : AppCompatActivity() {
                     dateList.removeAt(dateList.size-1)
                 }
                 val dateSelected = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+                val today = Calendar.getInstance()
+                println(today.time)
                 dateSelected.time = Date(it)
-                dateList.add(dateSelected.get(Calendar.DAY_OF_MONTH).toString() + "-" + (dateSelected.get(
-                    Calendar.MONTH)+1).toString() + "-" + dateSelected.get(Calendar.YEAR).toString())
-                customAdapter.notifyDataSetChanged()
-                exerciseChoice.isEnabled = true
+                println(dateSelected.time)
+                println(today.time.after(dateSelected.time))
+
+                if (today.time.before(dateSelected.time)) {
+                    Snackbar.make(view, "Cannot select a future date", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show()
+                } else {
+                    dateList.add(dateSelected.get(Calendar.DAY_OF_MONTH).toString() + "-" + (dateSelected.get(
+                        Calendar.MONTH)+1).toString() + "-" + dateSelected.get(Calendar.YEAR).toString())
+                    customAdapter.notifyDataSetChanged()
+                    exerciseChoice.isEnabled = true
+                }
             }
         }
 
         exerciseChoice.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
-            val singleItems = arrayOf("Arms","Back","Chest","Legs","Pull","Push","Shoulders")
+            val singleItems = arrayOf("Arms","Back","Chest","Legs","Pull","Push")
             val checkedItem = 0
             var selectedExercise: String = ' '.toString()
 
@@ -185,6 +196,9 @@ class MainActivity : AppCompatActivity() {
                 }
                 .setPositiveButton(resources.getString(R.string.accept)) { dialog, which ->
                     // Respond to positive button press
+                    if (selectedExercise.length == 1) {
+                        selectedExercise = singleItems[0]
+                    }
                     itemsList.add(selectedExercise)
                     selectionList.add(false)
                     customAdapter.notifyDataSetChanged()

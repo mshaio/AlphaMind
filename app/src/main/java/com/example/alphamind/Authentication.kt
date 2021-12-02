@@ -1,9 +1,11 @@
 package com.example.alphamind
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.navigation.ui.AppBarConfiguration
 import com.example.alphamind.databinding.ActivityAuthenticationBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -37,6 +39,11 @@ class Authentication : AppCompatActivity() {
         setContentView(binding.root)
 
         setSupportActionBar(binding.toolbar)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.statusBarColor = ContextCompat.getColor(this, R.color.brown_300)
+            window.navigationBarColor = ContextCompat.getColor(this, R.color.brown_300)
+        }
+        window.decorView.setBackgroundColor(resources.getColor(R.color.brown_300))
 
         if (isSignedIn()) {
             println("SINGED OUT")

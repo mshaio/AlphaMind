@@ -219,7 +219,7 @@ class dashboard : AppCompatActivity() {
         }
         var radarDataSet = RadarDataSet(entries, " ")
 //        radarDataSet.setColors(Color.rgb(248,177,149))
-        radarDataSet.setColors(resources.getColor(R.color.sun_set_2))
+        radarDataSet.setColors(resources.getColor(R.color.sun_set_1))
         radarDataSet.setLineWidth(2f)
         radarDataSet.setValueTextColor(resources.getColor(R.color.white))
         radarDataSet.setValueTextSize(0f)
@@ -231,8 +231,8 @@ class dashboard : AppCompatActivity() {
         radarDataSet2.setValueTextSize(0f)
 
         var radarData: RadarData = RadarData()
-        radarData.addDataSet(radarDataSet)
         radarData.addDataSet(radarDataSet2)
+        radarData.addDataSet(radarDataSet)
 
         var labels: ArrayList<String> = ArrayList<String>()
         labels.add("Arms")

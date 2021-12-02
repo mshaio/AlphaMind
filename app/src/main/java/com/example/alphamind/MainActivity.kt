@@ -4,6 +4,8 @@ import android.content.ClipData
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
+import android.os.Environment.DIRECTORY_DOWNLOADS
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -42,9 +44,17 @@ import io.realm.RealmObject
 import io.realm.RealmResults
 import io.realm.Sort
 import io.realm.annotations.PrimaryKey
+import org.apache.commons.csv.CSVFormat
+import org.apache.commons.csv.CSVPrinter
 import org.bson.types.ObjectId
+import java.io.BufferedWriter
+import java.io.File
+import java.nio.file.Paths
 import java.util.zip.Inflater
 import kotlin.collections.HashMap
+import java.io.FileWriter
+import java.io.IOException
+import java.util.Arrays
 
 class MainActivity : AppCompatActivity() {
 
@@ -147,6 +157,10 @@ class MainActivity : AppCompatActivity() {
                     saveDataToCloud()
                     true
                 }
+                R.id.save_to_csv -> {
+                    saveDataToCSV()
+                    true
+                }
                 else -> false
             }
         }
@@ -213,40 +227,6 @@ class MainActivity : AppCompatActivity() {
                 }
                 .show()
         }
-
-//        search.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
-//            override fun onQueryTextSubmit(query: String?): Boolean {
-//                if (itemsList.contains(query)) {
-//                    Realm.init(applicationContext)
-//                    val realm = Realm.getDefaultInstance()
-//                    val activities = realm.where(ExerciseModel::class.java).sort("date", Sort.DESCENDING).equalTo("exerciseType",query).findAll()
-//                    for (item in activities) {
-//                        if (!dateList.contains(item.date)) {
-//                            itemsList.add(item.exerciseType)
-//                            dateList.add(item.date!!)
-//                            filteredItemsList.addAll(itemsList)
-//                            selectionList.add(false)
-//                        }
-//                    }
-////                    filteredItemsList.addAll(itemsList)
-//                    customAdapter.notifyDataSetChanged()
-//                }
-//                return false
-//            }
-//
-//            override fun onQueryTextChange(newText: String?): Boolean {
-//                if (filteredItemsList.contains(newText)) {
-//                    println("VVV")
-//                    println(filteredItemsList)
-//                }
-//                if (itemsList.contains(newText)) {
-//                    println("VVB")
-//                    println(itemsList)
-//                }
-//                return false
-//            }
-//        })
-
     }
 
 //    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
@@ -404,15 +384,6 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this,"Please Sign in with Google to sync",Toast.LENGTH_SHORT).show()
             return
         }
-//        val city = hashMapOf(
-//            "name" to "Los Angeles",
-//            "state" to "CA",
-//            "country" to "USA"
-//        )
-//        db.collection("cities").document("LA")
-//            .set(city)
-//            .addOnSuccessListener { Toast.makeText(this,"DocumentSnapshot successfully written!", Toast.LENGTH_LONG).show() }
-//            .addOnFailureListener { e -> println(e) }
 
         if (activitiesInRealm.size == 0) {
             Toast.makeText(this,"Everything is up to date", Toast.LENGTH_SHORT).show()
@@ -448,6 +419,45 @@ class MainActivity : AppCompatActivity() {
                     }
                     .addOnFailureListener { e -> println(e) }
             }
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun saveDataToCSV() {
+        val CSV_HEADER = "activity,exerciseType,set #,reps,weights,date,dateDate,notes"
+        var baseDir = android.os.Environment.getExternalStorageDirectory().toString() + "/Download"
+        var fileName = "activities.csv"
+        var filePath = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS) //baseDir + '/' + fileName
+        var fileWriter = File(baseDir,fileName)
+        try {
+            Toast.makeText(this,"Saving to CSV ...",Toast.LENGTH_SHORT).show() //Not showing for some reason
+            fileWriter.delete()
+            fileWriter.createNewFile()
+            fileWriter.appendText(CSV_HEADER)
+            fileWriter.appendText("\n")
+
+            for (activity in queryObjectInRealm()) {
+                fileWriter.appendText(activity.activity)
+                fileWriter.appendText(",")
+                fileWriter.appendText(activity.exerciseType)
+                fileWriter.appendText(",")
+                fileWriter.appendText(activity.sets.toString())
+                fileWriter.appendText(",")
+                fileWriter.appendText(activity.reps.toString())
+                fileWriter.appendText(",")
+                fileWriter.appendText(activity.weights.toString())
+                fileWriter.appendText(",")
+                fileWriter.appendText(activity.date.toString())
+                fileWriter.appendText(",")
+                fileWriter.appendText(activity.dateDate.toString())
+                fileWriter.appendText(",")
+                fileWriter.appendText(activity.notes!!)
+                fileWriter.appendText("\n")
+            }
+            Toast.makeText(this,"CSV saved to Downloads",Toast.LENGTH_SHORT).show()
+        } catch (e: Exception) {
+            Toast.makeText(this,"Unable to save locally",Toast.LENGTH_SHORT).show()
+            e.printStackTrace()
         }
     }
 }
